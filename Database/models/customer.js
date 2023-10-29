@@ -16,7 +16,8 @@ const customerSchema = mongoose.Schema({
 
     phoneNumber: {
         type: Number,
-        match: /^([7-9][0-9]{9})$/g,
+        match:/^\+\d{1,3}\s?\d{10}$/g
+
     },
     address: [{
         Street: { type: String },
