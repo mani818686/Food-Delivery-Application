@@ -1,0 +1,29 @@
+.categories-card{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:space-around;
+}
+.cards{
+    border: 1px solid black;
+    margin: 15px;
+    border-radius: 5px;
+    box-shadow: 0.5px 0.5px 0.5px 0.8px black;
+    background-color: white !important;
+    .image{
+        margin: 10px;
+    }
+    .title{
+        margin-top: 5px;
+    }
+    .more{
+        float: right;
+        margin-right: 30px;
+    }
+    .link{
+        background: none;
+        border: none;
+        padding: 0;
+        color: blue;
+        cursor: pointer;
+    }
+}
