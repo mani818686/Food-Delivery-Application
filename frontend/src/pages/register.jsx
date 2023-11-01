@@ -27,7 +27,7 @@ export default function Register() {
   }
   return (
   <div class="container">
-    <div class="title mt-2 justify-content-center align-items-center border p-2">Registration</div>
+    <div class="title">Registration</div>
     <div class="content">
         <div class="user-details">
           <div class="input-box">

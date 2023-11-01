@@ -4,11 +4,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
-
-const itemLib = require("../lib")
 const adminModel = require("../models/admin")
-const secretKey = process.env.secretOrPrivateKey
-
 
 router.post("/signup", (req, res) => {
     adminModel.find({ email: req.body.email })
@@ -89,6 +85,7 @@ router.post("/login", (req, res) => {
             }
             if (result) {
                 const token = jwt.sign({
+                        userType:"Admin",
                         userId: admin[0]._id,
                         firstName:admin[0].firstName,
                         lastName:admin[0].lastName,
@@ -106,6 +103,7 @@ router.post("/login", (req, res) => {
                 return res.status(200).json({
                     message: "Auth successful",
                     userDetails: {
+                        userType:"Admin",
                         userId: admin[0]._id,
                         firstName:admin[0].firstName,
                         lastName:admin[0].lastName,

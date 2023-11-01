@@ -1,8 +1,8 @@
-.login-container {
-  width: 400px;
+.login-container-item {
+  width: 500px;
   margin: auto;
   padding: 20px 20px 20px 20px;
-  margin-top: 150px;
+  margin-top: 110px;
   border: 2px solid #ccc;
   border-radius: 2px;
   background-color: #f9f9f9;
@@ -27,8 +27,8 @@ font-style: normal;
   margin-top: 25px;
 }
 
-.form-control-item {
-  width: 100%;
+.form-control {
+  width: 70%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 3px;

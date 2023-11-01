@@ -1,0 +1,36 @@
+.products-container{
+    display: flex;
+    margin-top: 10px;
+}
+.filters{
+    width: 380px !important;
+}
+.products{
+    display: flex;
+    flex-wrap: wrap;
+    .image{
+        
+        webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    height: 275px;
+    margin-bottom: 44px;
+    padding: 0 20px;
+    background-color: cadetblue;
+    }
+    .Card{
+        background-clip: border-box;
+        margin: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.175);
+      
+    }
+    .brand-name{
+        margin-top: 5px;
+    }
+}
+.info{
+    display: flex;
+    justify-content: space-around !important;
+    background-color: lightgrey;
+}
+

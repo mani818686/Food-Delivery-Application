@@ -5,9 +5,9 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
 
-const itemLib = require("../lib")
+
 const customerModel = require("../models/customer")
-const secretKey = process.env.secretOrPrivateKey
+
 
 
 router.post("/signup", (req, res) => {
@@ -90,6 +90,7 @@ router.post("/login", (req, res) => {
             }
             if (result) {
                 const token = jwt.sign({
+                        userType:"User",
                         userId: customer[0]._id,
                         firstName:customer[0].firstName,
                         lastName:customer[0].lastName,
@@ -107,6 +108,7 @@ router.post("/login", (req, res) => {
                 return res.status(200).json({
                     message: "Auth successful",
                     userDetails: {
+                        userType:"User",
                         userId: customer[0]._id,
                         firstName:customer[0].firstName,
                         lastName:customer[0].lastName,
