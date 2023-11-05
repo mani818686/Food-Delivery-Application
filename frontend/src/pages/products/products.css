@@ -10,7 +10,7 @@
     flex-wrap: wrap;
     .image{
         
-        webkit-box-flex: 1;
+    -webkit-box-flex: 1;
     -ms-flex-positive: 1;
     flex-grow: 1;
     height: 275px;
@@ -32,5 +32,12 @@
     display: flex;
     justify-content: space-around !important;
     background-color: lightgrey;
+  
 }
 
+.add-product-btn{
+    font-size: 12px !important;
+    margin: 0px !important;
+    padding: 4px !important; 
+    margin-bottom: 8px !important;
+}

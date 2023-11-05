@@ -1,10 +1,26 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import "./products.css"
+import { useSelector, useDispatch } from 'react-redux'
+import { addProduct,deleteProduct } from '../../cartslice'
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 function Products({ category }) {
 
   const [products, setproducts] = useState([])
+
+  const cart = useSelector(state=>state.cart.items)
+  console.log(cart)
+
+  const dispatch = useDispatch()
+
+  const handleAddCart = (product) =>{
+    if(!(product._id in cart)){
+      dispatch(addProduct(product))
+    }else
+    dispatch(deleteProduct(product._id))
+  }
 
   useEffect(() => {
     let url = "http://localhost:5001/api/product/products"
@@ -49,6 +65,7 @@ function Products({ category }) {
                       </div>
                       <div className="right">
                         <div className='size'>Size : {product.variantId.size}</div>
+                        <div> <button className='add-product-btn btn btn-primary' onClick={(e)=>handleAddCart(product)}>{product._id in cart ?<DeleteIcon/>: "Add to Cart"}</button></div>
                       </div>
                     </div>
                   </div>

@@ -8,6 +8,7 @@ import Home from './pages/home/home';
 import { useState } from 'react';
 import Products from './pages/products/products';
 import Addproducts from './pages/addProducts/addproducts';
+import Cart from './pages/cart/cart';
 
 
 function App() {
@@ -19,14 +20,15 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar/>
       <Router>
+      <Navbar/>
         <Routes>
         <Route exact path="/" element={<Home handleSelectedCategory = {handleCategory}/>}></Route>
         <Route exact path="/register" element={<Register/>}></Route>
         <Route exact path="/login" element={<Login/>}></Route>
         <Route exact path="/products" element={<Products category={Category}/>}></Route>
         <Route exact path="/addProducts" element={<Addproducts/>}></Route>
+        <Route exact path="/cart" element={<Cart/>}></Route>
         </Routes>
     </Router>
     </div>
