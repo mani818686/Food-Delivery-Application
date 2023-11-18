@@ -21,26 +21,40 @@ function Checkout() {
             <div className="address-content">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="address" id="address1" checked/>
-                    <label class="form-check-label" for="address1">
-                       <div className="address">
-                            Address 1
+                    <label class="form-check-label label1" for="address1">
+                       <div className="addressContent">
+                       <b>Shekhar Balagoni</b>  <p>Contact: 9132385578</p>  
+                       8-7-89, Plot No-93
+                       Chaitanya Nagar BNREDDY, Road No 4
+                       Padma Nilayam, 2nd Floor, BN Reddy Nagar,
+                       Hyderabad, Telangana - 500079         
                        </div>
                     </label>
                 </div>
 
                 <div class="form-check ">
                     <input class="form-check-input" type="radio" name="address" id="address2" />
-                    <label class="form-check-label" for="address2">
-                    <div className="address">
-                            Address 2
+                    <label class="form-check-label label1" for="address1">
+                       <div className="addressContent">
+                       <b>Manideep</b>  <p>Contact: 9132385590</p>  
+                       8-7-89, Plot No-93
+                       Chaitanya Nagar BNREDDY, Road No 4
+                       Padma Nilayam, 2nd Floor, BN Reddy Nagar,
+                       Hyderabad, Telangana - 500079         
                        </div>
                     </label>
                 </div>
+
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="address" id="address3" />
-                    <label class="form-check-label" for="address3">
-                    <div className="address">
-                            Address 3
+                   <label class="form-check-label label1" for="address1">
+                       <div className="addressContent">
+                       <b>Sai Surya</b>  
+                       <p>Contact: 9132385576</p>  
+                       8-7-89, Plot No-93
+                       Chaitanya Nagar BNREDDY, Road No 4
+                       Padma Nilayam, 2nd Floor, BN Reddy Nagar,
+                       Hyderabad, Telangana - 500079         
                        </div>
                     </label>
                 </div>
@@ -52,28 +66,31 @@ function Checkout() {
                 {showAddress &&
                     <>
                         <div className="input-address mt-5 ">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text">Street</span>
-                                <input type="text" class="form-control" />
+                            <div className="form-group">
+                            <label htmlFor="Street" className="head">Street</label>
+                            <input type="text" className="form-control" id="size"/>
                             </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text">City</span>
-                                <input type="text" class="form-control" />
+                            <div className="form-group">
+                            <label htmlFor="City" className="head">City</label>
+                            <input type="text" className="form-control" id="City"/>
+                            </div>    
+                            <div className="form-group">
+                            <label htmlFor="State" className="head">State</label>
+                            <input type="text" className="form-control" id="State"/>
+                            </div>    
+                            <div className="form-group">
+                            <label htmlFor="Country" className="head">Country</label>
+                            <input type="text" className="form-control" id="Country"/>
+                            </div>            
+                            <div className="form-group">
+                            <label htmlFor="PinCode" className="head">PinCode</label>
+                            <input type="text" className="form-control" id="PinCode"/>
                             </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text">State</span>
-                                <input type="text" class="form-control" />
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text">Country</span>
-                                <input type="text" class="form-control" />
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text">PinCode</span>
-                                <input type="text" class="form-control" />
-                            </div>
-                            <button className="btn btn-light">Add Address</button>
+                           
                         </div>
+                        <div>
+                         <button className="btn btn-light btn1">Add Address</button>
+                         </div> 
                     </>
                 }
 
