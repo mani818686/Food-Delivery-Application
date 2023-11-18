@@ -28,8 +28,8 @@ const orderSchema = mongoose.Schema({
     }
     ],
     date:{type:Date},
-    isReturnRequested:{type:Boolean},
-    orderStatus:{type:String}
+    isReturnRequested:{type:Boolean,default:false},
+    orderStatus:{type:String,default:"Ordered"}
 })
 
 module.exports = mongoose.model("Order", orderSchema);

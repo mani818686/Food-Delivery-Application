@@ -1,0 +1,35 @@
+.checkout-container{
+    margin-top: 8%;
+    margin-left: 10px;
+    width:80%
+}
+
+.address-header{
+    background-color: #2874f0;;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.address-content{
+     display: flex;
+     flex-direction: column;
+     border: 1px solid whitesmoke;
+     background-color: white !important;
+}
+.address{
+    border: 1px solid whitesmoke;
+    display: flex;
+}
+.btn{
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: whitesmoke !important;
+    color:black
+}
+input[type="radio"]{
+    display: inline;
+}
+.form-check{
+    border :1px solid whitesmoke !important;
+    margin: 10px;
+}
