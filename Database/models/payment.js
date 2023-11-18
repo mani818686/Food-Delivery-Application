@@ -9,6 +9,7 @@ const paymentSchema = mongoose.Schema({
    date:{type:Date, default: Date.now},
    amount:{type:Number,required:true},
    paymentMethod:{type:String, required:true},
+   paymentDetails:{type:String,required:true}
     
 })
 

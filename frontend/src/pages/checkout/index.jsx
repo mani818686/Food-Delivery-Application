@@ -11,6 +11,15 @@ function Checkout() {
     })
     const [showAddress, setshowAddress] = useState(false)
 
+    const [selectedAddressIndex,setDeliverAddressIndex] = useState(0)
+
+    const handleOrder = () =>{
+
+    }
+   const handleOptionChange = (e) =>{
+    setDeliverAddressIndex(e.target.value)
+   }
+
     return (
         <div className="checkout-container">
             <div className="address-header">
@@ -20,16 +29,16 @@ function Checkout() {
             </div>
             <div className="address-content">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="address" id="address1" checked/>
+                    <input class="form-check-input" type="radio" name="address" id="address1" value="0" onChange={handleOptionChange}/>
                     <label class="form-check-label" for="address1">
                        <div className="address">
-                            Address 1
+                            Address 1 
                        </div>
                     </label>
                 </div>
 
                 <div class="form-check ">
-                    <input class="form-check-input" type="radio" name="address" id="address2" />
+                    <input class="form-check-input" type="radio" name="address" value="1" id="address2" onChange={handleOptionChange} />
                     <label class="form-check-label" for="address2">
                     <div className="address">
                             Address 2
@@ -37,14 +46,15 @@ function Checkout() {
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="address" id="address3" />
+                    <input class="form-check-input" type="radio" name="address" value="3" id="address3" onChange={handleOptionChange}  />
                     <label class="form-check-label" for="address3">
                     <div className="address">
                             Address 3
                        </div>
                     </label>
-                </div>
+                </div>  
             </div>
+            <button className="btn" onClick={handleOrder}>Deliver Here</button>
             <div className="add-address">
                 {!showAddress && <div className="add-button">
                     <button className="btn btn-light" onClick={() => setshowAddress((p) => !p)}>Add Address</button>

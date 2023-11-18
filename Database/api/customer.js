@@ -7,7 +7,12 @@ const jwt = require("jsonwebtoken")
 
 
 const customerModel = require("../models/customer")
+const orderModel = require("../models/order")
+const deliveryModel = require("../models/delivery")
+const paymentModel = require("../models/payment")
+const deliveryPersonModel = require("../models/deliveryPersonInfo")
 
+const customerId = "653d9dff444cb8cda40581b7";
 
 
 router.post("/signup", (req, res) => {
@@ -135,9 +140,71 @@ router.post("/login", (req, res) => {
 
 })
 
+router.post("/createOrder", async (req, res) => {
+    try {
+        const payment = new paymentModel({
+            _id: new mongoose.Types.ObjectId(),
+            orderId:null,
+            amount: req.body.price,
+            paymentMethod: req.body.paymentMethod,
+            paymentDetails: req.body.paymentDetails,
+        });
+
+         await payment.save();
+
+        const order = new orderModel({
+            _id: new mongoose.Types.ObjectId(),
+            price:req.body.price,
+            customerId:customerId,
+            paymentId: payment._id,
+            deliveryId:null,
+            Items:req.body.items,
+            address:req.body.address
+        });
+
+        await order.save();
+        payment.orderId = order._id;
+        await payment.save();
+
+        const closestDeliveryPerson = await deliveryPersonModel
+            .findOne()
+            .sort({
+                $abs: {
+                    $subtract: [
+                        { $toDecimal: "$address.pincode" },  
+                        { $toDecimal: req.body.address.pincode }  
+                    ]
+                }
+            });
+
+            const delivery = new deliveryModel({
+                _id: new mongoose.Types.ObjectId(),
+                deliveryPersonId: closestDeliveryPerson._id,
+                type: type,
+                address: address,
+                expectedDeliverydate: expectedDeliveryDate,
+                status: "Ordered"
+            });
+            
+            // Save the delivery entry
+            await delivery.save();
+
+        res.status(201).json({
+            message: "Order created successfully",
+            orderDetails: order,
+            paymentDetails:payment,
+            deliveryDetails:delivery,
+            deliverypersonInfo : closestDeliveryPerson
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 router.post('/add-address', async (req, res) => {
     try {
-        const customerId = "653d9dff444cb8cda40581b7";
+        
         const { street, city, pincode, state, country } = req.body;
 
         const customer = await customerModel.findById(customerId);

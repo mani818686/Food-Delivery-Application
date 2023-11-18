@@ -10,6 +10,7 @@ import Products from './pages/products/products';
 import Addproducts from './pages/addProducts/addproducts';
 import Cart from './pages/cart/cart';
 import Checkout from './pages/checkout';
+import Payment from './pages/payment';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route exact path="/addProducts" element={<Addproducts/>}></Route>
         <Route exact path="/cart" element={<Cart/>}></Route>
         <Route exact path="/checkout" element={<Checkout/>}></Route>
+        <Route exact path="/payment" element={<Payment/>}></Route>
         </Routes>
     </Router>
     </div>

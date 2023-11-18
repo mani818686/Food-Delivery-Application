@@ -11,23 +11,25 @@ const Payment = require("./payment")
 const Product = require("./product")
 
 const orderSchema = mongoose.Schema({
-
     _id: mongoose.Schema.Types.ObjectId,
     price: { type: Number, required: true },
-    categoryId:{type:mongoose.Schema.Types.ObjectID, ref:"Category"},
-    brandId:{type:mongoose.Schema.Types.ObjectID, ref:"Brand"},
-    adminId:{type:mongoose.Schema.Types.ObjectID, ref:"Admin"},
     returnId:{type:mongoose.Schema.Types.ObjectID, ref:"Return"},
     customerId:{type:mongoose.Schema.Types.ObjectID, ref:"Customer"},
     deliveryId:{type:mongoose.Schema.Types.ObjectID, ref:"Delivery"},
     paymentId:{type:mongoose.Schema.Types.ObjectID, ref:"Payment"},
     Items:[{
         productId: {type:mongoose.Schema.Types.ObjectID, ref:"Product"},
-        quantity:{type:Number,required:true},
-        variantId:{type:mongoose.Schema.Types.ObjectID, ref:"Variant"},
+        quantity:{type:Number,required:true,default:1},
     }
     ],
-    date:{type:Date},
+    address: {
+        street: { type: String },
+        city: { type: String },
+        pincode: { type: String },
+        state: { type: String },
+        country: { type: String }
+    },
+    date:{type:Date,default:new Date()},
     isReturnRequested:{type:Boolean,default:false},
     orderStatus:{type:String,default:"Ordered"}
 })
