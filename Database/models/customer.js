@@ -11,9 +11,9 @@ const customerSchema = mongoose.Schema({
         type: String,
         required: true,
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+        unique: true
     },
     password: { type: String },
-
     phoneNumber: {
         type: Number,
         match:/^\+\d{1,3}\s?\d{10}$/g
@@ -25,6 +25,10 @@ const customerSchema = mongoose.Schema({
         pincode: { type: String },
         state: { type: String },
         country: { type: String }
+    }],
+    wishlist:[{ productId: { type: mongoose.Schema.Types.ObjectID, ref: "Product" },quantity:{type:Number,required:true,default:1}}],
+    orderHistory: [{
+        OrderId: { type: mongoose.Schema.Types.ObjectID, ref: "Order" },
     }],
     paymentId:[{type:mongoose.Schema.Types.ObjectID, ref:"Payment"}],
 })

@@ -1,20 +1,23 @@
 import React, { useState } from 'react'
 import "./register.css"
+import {postData} from '../http-post-service';
+import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
-  const [userData,setuserData] = useState(
-    {"email":"",
-    "firstName":"",
-    "lastName":"",
-    "password":"",
-    "Confirmpassword":"",
-    "phone":"",
-    "street":"",
-    "city":"",
-    "state":"",
-    "country":"",
-    "pin":""
-  });
+  const defaultUser = {"email":"",
+  "firstName":"",
+  "lastName":"",
+  "password":"",
+  "Confirmpassword":"",
+  "phoneNumber":"",
+  "street":"",
+  "city":"",
+  "state":"",
+  "country":"",
+  "pincode":""
+}
+  const [userData,setuserData] = useState(defaultUser);
+  const navigate = useNavigate();
 
   const handleData = (column,e)=>{
     setuserData((data)=>({
@@ -22,8 +25,17 @@ export default function Register() {
       [column]:e.target.value
     }))
   }
-  const handleRegister = () =>{
+  const handleRegister = async() =>{
     console.log(userData)
+      const response = await postData("/customer/signup",JSON.stringify(userData))
+      if(response.message == "customer created"){
+        setuserData(defaultUser)
+        navigate("/")
+      }
+      else{
+        console.error(response)
+        setuserData(defaultUser)
+      }
   }
   return (
   <div class="container">
@@ -52,7 +64,7 @@ export default function Register() {
           </div>
           <div class="input-box">
             <span class="details">Phone Number</span>
-            <input type="tel" placeholder="Enter your number" onChange={(e)=>handleData('phone',e)} required/>
+            <input type="tel" placeholder="Enter your number" onChange={(e)=>handleData('phoneNumber',e)} required/>
           </div>  
           <div class="input-box">
             <span class="details">Street</span>
@@ -72,29 +84,9 @@ export default function Register() {
           </div> 
           <div class="input-box">
             <span class="details">PinCode</span>
-            <input type="text" placeholder="Enter your PinCode" onChange={(e)=>handleData('pin',e)} required/>
+            <input type="text" placeholder="Enter your PinCode" onChange={(e)=>handleData('pincode',e)} required/>
           </div> 
         </div>
-        {/* <div class="gender-details">
-          <input type="radio" name="gender" id="dot-1"/>
-          <input type="radio" name="gender" id="dot-2"/>
-          <input type="radio" name="gender" id="dot-3"/>
-          <span class="gender-title">Gender</span>
-          <div class="category">
-            <label for="dot-1">
-            <span class="dot one"></span>
-            <span class="gender">Male</span>
-          </label>
-          <label for="dot-2">
-            <span class="dot two"></span>
-            <span class="gender">Female</span>
-          </label>
-          <label for="dot-3">
-            <span class="dot three"></span>
-            <span class="gender">Prefer not to say</span>
-            </label>
-          </div>
-        </div> */}
         <div class="button">
           <input type="submit"  value="Register" onClick={handleRegister}/>
         </div>

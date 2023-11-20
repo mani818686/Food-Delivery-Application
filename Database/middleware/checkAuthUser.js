@@ -3,6 +3,7 @@ const JWT = require("jsonwebtoken");
 module.exports = function(req, res, next) {
     const token = req.header("token")
         // console.log(req.header['auth-token'])
+    console.log(token,"Token")
     if (!token) return res.status(401).json({
         message: "Unauthorized access",
     });
@@ -10,7 +11,7 @@ module.exports = function(req, res, next) {
         const verified = JWT.verify(token, process.env.jwtSecret);
         req.user = verified;
 
-        // console.log(req.user)
+        console.log(req.user,"User Details")
         // console.log(req.user);
         if (req.user.userType === "User") {
             next();

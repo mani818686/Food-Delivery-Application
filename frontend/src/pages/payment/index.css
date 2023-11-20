@@ -1,0 +1,12 @@
+.payment-container{
+    margin-top: 5%;
+    margin-left: 10px;
+    width:80%
+}
+
+.payment-header{
+    background-color: #2874f0;;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
