@@ -8,6 +8,7 @@ function Home({handleSelectedCategory}) {
         handleSelectedCategory(category)
         navigate("/products")
     }
+
     return (
         <div className='home-container'>
             <div className="categories-card">

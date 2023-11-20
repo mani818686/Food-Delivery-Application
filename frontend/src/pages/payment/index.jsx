@@ -1,14 +1,21 @@
 import { useState } from 'react'
 import "./index.css"
-import postData from '../../http-post-service'
+import {postData} from '../../http-post-service'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-function Payment() {
+function Payment({handleOrderDetails}) {
 
     const [paymentMethod, setPaymentMethod] = useState('Debit Card')
     const [cardNumber, setcardNumber] = useState('')
     const [cardCode, setcardCode] = useState('')
     const [error,setError] = useState();
+    const cart = Object.values(useSelector(state => state.cart.items));
+    const selectedAddress = useSelector((state)=>state.user.user.selectedAddress)
 
+    const navigate = useNavigate()
+
+    const totalPrice = useSelector((state)=>state.cart.price)
 
     const handlePaymentMethod = (e) => {
         setPaymentMethod(e.target.value)
@@ -21,10 +28,22 @@ function Payment() {
     }
 
     const handlePayment = async () =>{
-
+        let orderData ={
+            "price":totalPrice,
+            "paymentMethod":paymentMethod,
+            "paymentDetails":cardNumber+"-"+cardCode,
+            "items":cart,
+            "address":selectedAddress,
+            "type":"Express Delivery"
+        }
         try {
-            const result = await postData('/', postData);
+            const result = await postData('/customer/createOrder',JSON.stringify(orderData) );
             console.log('POST request successful:', result);
+            if(result.message == "Order created successfully"){
+                handleOrderDetails(result)
+                navigate("/confirmation")
+            }
+
           } catch (error) {
             console.error('Error during POST request:', error);
             setError('An error occurred during the POST request');
@@ -65,7 +84,7 @@ function Payment() {
                 </div>
             </div>
             <div>
-                <button className='btn' onClick={handlePayment}>Proceed to Pay </button>
+                <button className='btn' onClick={handlePayment}>Proceed to Pay ${totalPrice}</button>
             </div>
         </div>
     )

@@ -10,15 +10,32 @@ const customerModel = require("../models/customer")
 const orderModel = require("../models/order")
 const deliveryModel = require("../models/delivery")
 const paymentModel = require("../models/payment")
-const deliveryPersonModel = require("../models/deliveryPersonInfo")
+const deliveryPersonModel = require("../models/deliveryPersonInfo");
+const productModel = require("../models/product")
+const checkAuthUser = require("../middleware/checkAuthUser");
 
-const customerId = "653d9dff444cb8cda40581b7";
 
+router.get("/checkUser", checkAuthUser, async(req, res, next) => {
+
+    customerModel.find({_id:req.user.userId})
+    .then((result)=>{
+        res.status(200).json({
+            result,
+        });
+    })
+    .catch((error)=>{
+        res.status(400).json({
+            message: "Error "+error,
+        });
+    })
+     
+    })
 
 router.post("/signup", (req, res) => {
+    console.log("Request Body",req.body)
     customerModel.find({ email: req.body.email })
         .then((customer) => {
-
+            console.log(customer)
             if (customer.length >= 1) {
                 res.status(409).json({
                     message: "Email already exists",
@@ -38,7 +55,13 @@ router.post("/signup", (req, res) => {
                             email: req.body.email,
                             password: hash,
                             phoneNumber: req.body.phoneNumber,
-                            address: req.body.address,
+                            address: {
+                                "street": req.body.street,
+                                "city": req.body.city,
+                                "state": req.body.state,
+                                "country": req.body.country,
+                                "pincode": req.body.pincode
+                            },
                             paymentId: []
                         };
 
@@ -54,7 +77,13 @@ router.post("/signup", (req, res) => {
                                         email: req.body.email,
                                         password: hash,
                                         phoneNumber: req.body.phoneNumber,
-                                        address: req.body.address,
+                                        address: {
+                                            "street": req.body.street,
+                                            "city": req.body.city,
+                                            "state": req.body.state,
+                                            "country": req.body.country,
+                                            "pincode": req.body.pincode
+                                        },
                                         paymentId: []
                                     },
                                 })
@@ -79,7 +108,19 @@ router.post("/signup", (req, res) => {
 
 
 router.post("/login", (req, res) => {
-    customerModel.find({ email: req.body.email })
+    customerModel.find({ email: req.body.email }).populate([
+        {
+        path: 'wishlist.productId',
+        model: 'Product'
+      },
+      {
+        path: 'orderHistory.OrderId',
+        model: 'Order',
+        populate: {
+          path: 'Items.products.productId',
+          model: 'Product'
+        },
+      }])
         .then((customer) => {
             if (customer.length < 1) {
                 return res.status(401).json({
@@ -103,7 +144,7 @@ router.post("/login", (req, res) => {
                         password: customer[0].password,
                         phoneNumber: customer[0].phoneNumber,
                         address: customer[0].address,
-                        paymentId: customer[0].paymentId
+                        paymentId: customer[0].paymentId,
                     },
                         process.env.jwtSecret, {
                         expiresIn: "1d",
@@ -118,10 +159,12 @@ router.post("/login", (req, res) => {
                             firstName: customer[0].firstName,
                             lastName: customer[0].lastName,
                             email: customer[0].email,
-                            password: customer[0].password,
                             phoneNumber: customer[0].phoneNumber,
                             address: customer[0].address,
-                            paymentId: customer[0].paymentId
+                            paymentId: customer[0].paymentId,
+                            wishlist:customer[0].wishlist,
+                            orderHistory:customer[0].orderHistory
+
                         },
                         token: token,
                     });
@@ -140,61 +183,84 @@ router.post("/login", (req, res) => {
 
 })
 
-router.post("/createOrder", async (req, res) => {
+router.post("/createOrder",checkAuthUser, async (req, res) => {
+    console.log(req.body)
     try {
         const payment = new paymentModel({
             _id: new mongoose.Types.ObjectId(),
-            orderId:null,
+            orderId: null,
             amount: req.body.price,
             paymentMethod: req.body.paymentMethod,
             paymentDetails: req.body.paymentDetails,
         });
 
-         await payment.save();
+        await payment.save();
 
         const order = new orderModel({
             _id: new mongoose.Types.ObjectId(),
-            price:req.body.price,
-            customerId:customerId,
+            price: req.body.price,
+            customerId: req.user.userId,
             paymentId: payment._id,
-            deliveryId:null,
-            Items:req.body.items,
-            address:req.body.address
+            deliveryId: null,
+            Items: req.body.items,
+            address: req.body.address
         });
 
         await order.save();
         payment.orderId = order._id;
         await payment.save();
 
-        const closestDeliveryPerson = await deliveryPersonModel
-            .findOne()
-            .sort({
-                $abs: {
-                    $subtract: [
-                        { $toDecimal: "$address.pincode" },  
-                        { $toDecimal: req.body.address.pincode }  
-                    ]
-                }
-            });
+        const customer = await customerModel.findById({_id:req.user.userId});
 
-            const delivery = new deliveryModel({
-                _id: new mongoose.Types.ObjectId(),
-                deliveryPersonId: closestDeliveryPerson._id,
-                type: type,
-                address: address,
-                expectedDeliverydate: expectedDeliveryDate,
-                status: "Ordered"
-            });
-            
-            // Save the delivery entry
-            await delivery.save();
+
+      if (!customer) {
+        return res.status(404).json({ message: 'Customer or Product not found' });
+      }
+      
+        customer.orderHistory.push({ OrderId: order._id });
+        await customer.save();
+        const closestDeliveryPerson = await deliveryPersonModel.aggregate([
+            {
+              $addFields: {
+                pincodeDifference: {
+                  $abs: {
+                    $subtract: [
+                      { $toDecimal: "$address.pincode" },
+                      { $toDecimal: req.body.address?.pincode }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              $sort: { pincodeDifference: 1 }
+            },
+            {
+              $limit: 1
+            }
+          ]);
+
+        const delivery = new deliveryModel({
+            _id: new mongoose.Types.ObjectId(),
+            deliveryPersonId: closestDeliveryPerson._id,
+            type: req.body.type,
+            address: req.body.address,
+            expectedDeliverydate: req.body.expectedDeliveryDate,
+            status: "Ordered"
+        });
+
+        order.deliveryId = delivery._id
+        await order.save();
+        // Save the delivery entry
+        await delivery.save();
 
         res.status(201).json({
             message: "Order created successfully",
             orderDetails: order,
-            paymentDetails:payment,
-            deliveryDetails:delivery,
-            deliverypersonInfo : closestDeliveryPerson
+            orderItems:req.body.items,
+            paymentDetails: payment,
+            deliveryDetails: delivery,
+            deliverypersonInfo: closestDeliveryPerson
         });
     } catch (error) {
         console.error(error);
@@ -202,12 +268,13 @@ router.post("/createOrder", async (req, res) => {
     }
 });
 
-router.post('/add-address', async (req, res) => {
+router.post('/add-address',checkAuthUser, async (req, res) => {
+
     try {
-        
+
         const { street, city, pincode, state, country } = req.body;
 
-        const customer = await customerModel.findById(customerId);
+        const customer = await customerModel.findById({_id:req.user.userId});
 
         if (!customer) {
             return res.status(404).json({ message: 'Customer not found' });
@@ -223,6 +290,37 @@ router.post('/add-address', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
+router.patch('/wishlist/add/:id', async (req, res) => {
+    const customerId =  "65598eb04da5c205448d67f0"|| req.user.userId;
+    const productId = req.params.id; 
+  
+    try {
+      // Check if the customer and product exist
+      const customer = await customerModel.findById(customerId);
+      const product = await productModel.findById(productId);
+  
+      if (!customer || !product) {
+        return res.status(404).json({ message: 'Customer or Product not found' });
+      }
+      
+      const existingWishlistItem = customer.wishlist.find(item => item.productId.equals(product._id));
+
+      if (existingWishlistItem) {
+        existingWishlistItem.quantity += 1;
+      } else {
+        customer.wishlist.push({ productId: product._id, quantity: 1 });
+      }
+    
+      await customer.save();
+  
+      res.status(200).json({ message: 'Product added to wishlist successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
 
 
 module.exports = router

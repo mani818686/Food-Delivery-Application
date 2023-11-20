@@ -128,27 +128,28 @@ router.get('/products', async (req, res) => {
   });
 
 
-  router.get("/products", async (req, res) => {
-  const brandName = req.query.brandName; 
+//   router.get("/products", async (req, res) => {
+//   const brandName = req.query.brandName; 
 
-  try {
-    const brand = await brandModel.findOne({ brandName }); 
+//   try {
+//     const brand = await brandModel.findOne({ brandName }); 
 
-    if (!brand) {
-      return res.status(404).json({ error: "Brand not found" });
-    }
+//     if (!brand) {
+//       return res.status(404).json({ error: "Brand not found" });
+//     }
 
-    const products = await productModel.find({ brandId: brand._id })
-      .populate("variantId")
-      .populate("categoryId")
-      .populate("brandId")
-      .exec();
+//     const products = await productModel.find({ brandId: brand._id })
+//       .populate("variantId")
+//       .populate("categoryId")
+//       .populate("brandId")
+//       .exec();
 
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching products" });
-  }
-});
+//     res.json(products);
+//   } catch (error) {
+//     res.status(500).json({ error: "Error fetching products" });
+//   }
+// });
+
 
 
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useFetch = (url, method = 'GET', body = null) => {
+const UseFetch = (url, method = 'GET', body = null) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -10,11 +10,12 @@ const useFetch = (url, method = 'GET', body = null) => {
       try {
         setLoading(true);
         setError(null);
-
+        let token = localStorage.getItem("authToken");
         const options = {
           method,
           headers: {
             'Content-Type': 'application/json',
+            "auth-token": token,
           },
           body: body ? JSON.stringify(body) : null,
         };
@@ -40,4 +41,4 @@ const useFetch = (url, method = 'GET', body = null) => {
   return { data, error, loading };
 };
 
-export default useFetch;
+export default UseFetch;
