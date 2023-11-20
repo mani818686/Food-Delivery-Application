@@ -20,7 +20,7 @@ function Checkout() {
             </div>
             <div className="address-content">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="address" id="address1" checked/>
+                    <input class="form-check-input" type="radio" name="address" id="address1"/>
                     <label class="form-check-label label1" for="address1">
                        <div className="addressContent">
                        <b>Shekhar Balagoni</b>  <p>Contact: 9132385578</p>  
@@ -33,7 +33,7 @@ function Checkout() {
                 </div>
 
                 <div class="form-check ">
-                    <input class="form-check-input" type="radio" name="address" id="address2" />
+                    <input class="form-check-input" type="radio" name="address" id="address2" checked />
                     <label class="form-check-label label1" for="address1">
                        <div className="addressContent">
                        <b>Manideep</b>  <p>Contact: 9132385590</p>  
@@ -89,7 +89,7 @@ function Checkout() {
                            
                         </div>
                         <div>
-                         <button className="btn btn-light btn1">Add Address</button>
+                         <button className="btn1">Add Address</button>
                          </div> 
                     </>
                 }
