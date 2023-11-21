@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import "./index.css"
-import {postData} from '../../http-post-service'
-import { useSelector } from 'react-redux'
+import {getData, postData} from '../../http-post-service'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { setAuthToken, setLoggedIn } from '../../loginSlice'
+import { saveUser } from '../../userslice'
+import { addAllproducts, deleteAllProducts } from '../../cartslice'
 
-function Payment({handleOrderDetails}) {
+function Payment( {handleOrderDetails}) {
 
     const [paymentMethod, setPaymentMethod] = useState('Debit Card')
     const [cardNumber, setcardNumber] = useState('')
@@ -12,8 +15,12 @@ function Payment({handleOrderDetails}) {
     const [error,setError] = useState();
     const cart = Object.values(useSelector(state => state.cart.items));
     const selectedAddress = useSelector((state)=>state.user.user.selectedAddress)
+    const isLoggedIn = useSelector((state) => state.login.details.isLoggedIn);
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const token = localStorage.getItem("authToken")
 
     const totalPrice = useSelector((state)=>state.cart.price)
 
@@ -28,11 +35,12 @@ function Payment({handleOrderDetails}) {
     }
 
     const handlePayment = async () =>{
+        const Items = Object.values(cart).map((product)=>({productId:product._id,quantity:product.quantity}))
         let orderData ={
             "price":totalPrice,
             "paymentMethod":paymentMethod,
             "paymentDetails":cardNumber+"-"+cardCode,
-            "items":cart,
+            "items":Items,
             "address":selectedAddress,
             "type":"Express Delivery"
         }
@@ -40,7 +48,9 @@ function Payment({handleOrderDetails}) {
             const result = await postData('/customer/createOrder',JSON.stringify(orderData) );
             console.log('POST request successful:', result);
             if(result.message == "Order created successfully"){
+                orderData.items = cart
                 handleOrderDetails(result)
+                dispatch(deleteAllProducts())
                 navigate("/confirmation")
             }
 
@@ -50,9 +60,29 @@ function Payment({handleOrderDetails}) {
 
           }
     }
+
+    useEffect(() => {
+        const getProfile = async () =>{
+          if (!isLoggedIn && token) {
+            dispatch(setAuthToken(token))
+            dispatch(setLoggedIn(true))
+            try {
+              const data = await getData("/customer/checkUser")
+              dispatch(saveUser(data.result[0]))
+              dispatch(addAllproducts(data.result[0].wishlist))
+            }
+            catch (error) {
+              console.error(error)
+            } 
+          }
+        }
+        getProfile()
+      },[isLoggedIn])
+
+
     if(error)
     return <p>{error}</p>
-
+  
     return (
         <div className="payment-container">
             <div className="payment-header">
@@ -84,7 +114,7 @@ function Payment({handleOrderDetails}) {
                 </div>
             </div>
             <div>
-                <button className='btn' onClick={handlePayment}>Proceed to Pay ${totalPrice}</button>
+                <button className='btn' onClick={handlePayment}>Proceed to Pay ${totalPrice.toFixed(2)}</button>
             </div>
         </div>
     )

@@ -5,6 +5,7 @@ import { saveUser } from '../userslice';
 import {postData} from '../http-post-service';
 import { useNavigate } from 'react-router-dom';
 import { setAuthToken, setLoggedIn, setisAdmin } from '../loginSlice';
+import { addAllproducts } from '../cartslice';
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export default function Login() {
       dispatch(saveUser(response.userDetails))
       dispatch(setLoggedIn(true))
       dispatch(setAuthToken(response.token))
+      dispatch(addAllproducts(response.userDetails.wishlist))
       localStorage.setItem("userLoggedIn", true);
       localStorage.setItem("authToken", response.token);
       navigate("/")
