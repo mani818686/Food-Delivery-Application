@@ -58,25 +58,25 @@ function Addproducts() {
       <h5 className='text-center'><u>Add Products</u></h5>
         <div className="form-group">
           <label htmlFor="name" className="head">Product Name</label>
-          <input type="text" className="form-control" id="name" onChange={(e) => handleData('name', e)} />
+          <input type="text" className="form-control-styles" id="name" onChange={(e) => handleData('name', e)} />
         </div>
       
 
       <div className="form-group">
         <label htmlFor="desc" className="head">Product Description</label>
-        <input type="text" className="form-control" id="desc" onChange={(e) => handleData('description', e)} />
+        <input type="text" className="form-control-styles" id="desc" onChange={(e) => handleData('description', e)} />
       </div>
       <div className="form-group">
         <label htmlFor="image" className="head">Upload Product Image</label>
-        <input type="file" className="form-control" accept="image/png, image/gif, image/jpeg" id="image" onChange={handleFileChange} />
+        <input type="file" className="form-control-styles" accept="image/png, image/gif, image/jpeg" id="image" onChange={handleFileChange} />
       </div>
       <div className="form-group">
         <label htmlFor="price" className="head">Price</label>
-        <input type="text" className="form-control" id="price" onChange={(e) => handleData('price', e)} />
+        <input type="text" className="form-control-styles" id="price" onChange={(e) => handleData('price', e)} />
       </div>
       <div className="form-group">
         <label htmlFor="size" className="head">Category</label>
-        <select class="form-select form-control" onChange={(e) => handleData("categoryName", e)}>
+        <select class="form-select form-control-styles" onChange={(e) => handleData("categoryName", e)}>
           <option value="Men's Top Wear">Men's Top Wear</option>
           <option value="Men's Bottom Wear">Men's Bottom Wear</option>
           <option value="Women's Ethnic">Women's Ethnic</option>
@@ -89,18 +89,18 @@ function Addproducts() {
       </div>
       <div className="form-group">
         <label htmlFor="brand" className="head">Brand Name</label>
-        <input type="text" className="form-control" id="brand" onChange={(e) => handleData('brandName', e)} />
+        <input type="text" className="form-control-styles" id="brand" onChange={(e) => handleData('brandName', e)} />
       </div>
       <div className="form-group">
         <label htmlFor="size" className="head">Size</label>
-        <input type="text" className="form-control" id="size" onChange={(e) => handleData('size', e)} />
+        <input type="text" className="form-control-styles" id="size" onChange={(e) => handleData('size', e)} />
       </div>
       <div className="form-group">
         <label htmlFor="color" className="head">Color</label>
-        <input type="text" className="form-control" id="color" onChange={(e) => handleData('color', e)} />
+        <input type="text" className="form-control-styles" id="color" onChange={(e) => handleData('color', e)} />
       </div>
 
-      <button className="btn btn-primary" onClick={handleAddProduct} >Add Product</button>
+      <button className="btn-color" onClick={handleAddProduct} >Add Product</button>
     </div>
   )
 }
