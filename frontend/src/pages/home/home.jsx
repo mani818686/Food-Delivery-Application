@@ -15,7 +15,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Mens Top Wear</h5>
                     <div className="image">
-                        <img src="topwear.jpeg" alt="Mens Top Wear" width="300px" height="320px" />
+                        <img src="MensTopwear.jpeg" alt="Mens Top Wear" width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button className="link" onClick={(e)=>handleCategory("Men's Top Wear")}>See more</button>
@@ -24,7 +24,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Mens Bottom Wear</h5>
                     <div className="image">
-                        <img src="mens_bottomwear.jpeg" alt="Mens Bottom Wear" width="300px" height="320px" />
+                        <img src="MensBottomwear.jpeg" alt="Mens Bottom Wear" width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button  className="link" onClick={(e)=>handleCategory("Men's Bottom Wear")}>See more</button>
@@ -33,7 +33,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Womens Ethnic</h5>
                     <div className="image">
-                        <img src="EthnicWear.jpg" alt="Womens Ethnic"  width="300px" height="320px" />
+                        <img src="EthnicWear.jpeg" alt="Womens Ethnic"  width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button  className="link"  onClick={(e)=>handleCategory("Women's Ethnic")} >See more</button>
@@ -42,7 +42,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Womens Western</h5>
                     <div className="image">
-                        <img src="topwear.jpeg" alt="Womens Western" width="300px" height="320px" />
+                        <img src="WomensWesternWear.jpeg" alt="Womens Western" width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button  className="link" onClick={(e)=>handleCategory("Women's Western")} >See more</button>
@@ -51,7 +51,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Mens FootWear</h5>
                     <div className="image">
-                        <img src="topwear.jpeg" alt="Mens Footwear" width="300px" height="320px" />
+                        <img src="MenFootwear.jpeg" alt="Mens Footwear" width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button  className="link" onClick={(e)=>handleCategory("Men's Footwear")} >See more</button>
@@ -60,7 +60,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Womens FootWear</h5>
                     <div className="image">
-                        <img src="topwear.jpeg" alt="WoMens Footwear" width="300px" height="320px" />
+                        <img src="FemaleFootwear.jpeg" alt="WoMens Footwear" width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button  className="link" onClick={(e)=>handleCategory("Women's Footwear")}>See more</button>
@@ -69,7 +69,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Kids Wear</h5>
                     <div className="image">
-                        <img src="topwear.jpeg" alt="Kids wear" width="300px" height="320px" />
+                        <img src="KidsWear.jpeg" alt="Kids wear" width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button  className="link" onClick={(e)=>handleCategory("Kids Wear")} >See more</button>
@@ -78,7 +78,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Accessories</h5>
                     <div className="image">
-                        <img src="topwear.jpeg" alt="Accessories" width="300px" height="320px" />
+                        <img src="Accessories.jpeg" alt="Accessories" width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button  className="link" onClick={(e)=>handleCategory("Accessories")}>See more</button>
