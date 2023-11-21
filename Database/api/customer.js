@@ -17,7 +17,15 @@ const checkAuthUser = require("../middleware/checkAuthUser");
 
 router.get("/checkUser", checkAuthUser, async(req, res, next) => {
 
-    customerModel.find({_id:req.user.userId})
+    customerModel.find({_id:req.user.userId}).populate([
+        {
+        path: 'wishlist.productId',
+        model: 'Product'
+      },
+      {
+        path: 'orderHistory.OrderId',
+        model: 'Order',
+      }])
     .then((result)=>{
         res.status(200).json({
             result,
@@ -116,10 +124,6 @@ router.post("/login", (req, res) => {
       {
         path: 'orderHistory.OrderId',
         model: 'Order',
-        populate: {
-          path: 'Items.products.productId',
-          model: 'Product'
-        },
       }])
         .then((customer) => {
             if (customer.length < 1) {
