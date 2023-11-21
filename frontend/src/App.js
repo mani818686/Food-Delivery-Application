@@ -29,7 +29,7 @@ function App() {
 const handleOrderDetails = (details)=>{
   setOrderDetails(details)
 }
-  
+
   return (
     <div className="App">
       <Router>
@@ -42,7 +42,7 @@ const handleOrderDetails = (details)=>{
         <Route exact path="/addProducts" element={<Addproducts/>}></Route>
         <Route exact path="/cart" element={<Cart/>}></Route>
         <Route exact path="/checkout" element={<Checkout/>}></Route>
-        <Route exact path="/payment" element={<Payment handleOrderDetails={handleOrderDetails}/>}></Route>
+        <Route exact path="/payment" element={<Payment handleOrderDetails={handleOrderDetails} />}></Route>
         <Route exact path="/confirmation" element={<Confirmation orderDetails={orderDetails}/>}></Route>
         </Routes>
     </Router>

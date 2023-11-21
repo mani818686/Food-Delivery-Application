@@ -15,24 +15,37 @@ const productModel = require("../models/product")
 const checkAuthUser = require("../middleware/checkAuthUser");
 
 
-router.get("/checkUser", checkAuthUser, async(req, res, next) => {
+router.get("/checkUser", checkAuthUser, async (req, res, next) => {
 
-    customerModel.find({_id:req.user.userId})
-    .then((result)=>{
-        res.status(200).json({
-            result,
-        });
-    })
-    .catch((error)=>{
-        res.status(400).json({
-            message: "Error "+error,
-        });
-    })
-     
-    })
+    customerModel.find({ _id: req.user.userId }).populate([
+        {
+            path: 'wishlist.productId',
+            model: 'Product',
+            populate: [
+                { path: 'brandId', model: 'Brand' },
+                { path: 'categoryId', model: 'Category' },
+                { path: 'variantId', model: 'Variant' },
+            ],
+        },
+        {
+            path: 'orderHistory.OrderId',
+            model: 'Order',
+        }])
+        .then((result) => {
+            res.status(200).json({
+                result,
+            });
+        })
+        .catch((error) => {
+            res.status(400).json({
+                message: "Error " + error,
+            });
+        })
+
+})
 
 router.post("/signup", (req, res) => {
-    console.log("Request Body",req.body)
+    console.log("Request Body", req.body)
     customerModel.find({ email: req.body.email })
         .then((customer) => {
             console.log(customer)
@@ -110,17 +123,18 @@ router.post("/signup", (req, res) => {
 router.post("/login", (req, res) => {
     customerModel.find({ email: req.body.email }).populate([
         {
-        path: 'wishlist.productId',
-        model: 'Product'
-      },
-      {
-        path: 'orderHistory.OrderId',
-        model: 'Order',
-        populate: {
-          path: 'Items.products.productId',
-          model: 'Product'
+            path: 'wishlist.productId',
+            model: 'Product',
+            populate: [
+                { path: 'brandId', model: 'Brand' },
+                { path: 'categoryId', model: 'Category' },
+                { path: 'variantId', model: 'Variant' },
+            ],
         },
-      }])
+        {
+            path: 'orderHistory.OrderId',
+            model: 'Order',
+        }])
         .then((customer) => {
             if (customer.length < 1) {
                 return res.status(401).json({
@@ -162,8 +176,8 @@ router.post("/login", (req, res) => {
                             phoneNumber: customer[0].phoneNumber,
                             address: customer[0].address,
                             paymentId: customer[0].paymentId,
-                            wishlist:customer[0].wishlist,
-                            orderHistory:customer[0].orderHistory
+                            wishlist: customer[0].wishlist,
+                            orderHistory: customer[0].orderHistory
 
                         },
                         token: token,
@@ -183,7 +197,7 @@ router.post("/login", (req, res) => {
 
 })
 
-router.post("/createOrder",checkAuthUser, async (req, res) => {
+router.post("/createOrder", checkAuthUser, async (req, res) => {
     console.log(req.body)
     try {
         const payment = new paymentModel({
@@ -210,35 +224,37 @@ router.post("/createOrder",checkAuthUser, async (req, res) => {
         payment.orderId = order._id;
         await payment.save();
 
-        const customer = await customerModel.findById({_id:req.user.userId});
+        const customer = await customerModel.findById({ _id: req.user.userId });
 
 
-      if (!customer) {
-        return res.status(404).json({ message: 'Customer or Product not found' });
-      }
-      
+        if (!customer) {
+            return res.status(404).json({ message: 'Customer or Product not found' });
+        }
+
+        customer.wishlist = [];
+
         customer.orderHistory.push({ OrderId: order._id });
         await customer.save();
         const closestDeliveryPerson = await deliveryPersonModel.aggregate([
             {
-              $addFields: {
-                pincodeDifference: {
-                  $abs: {
-                    $subtract: [
-                      { $toDecimal: "$address.pincode" },
-                      { $toDecimal: req.body.address?.pincode }
-                    ]
-                  }
+                $addFields: {
+                    pincodeDifference: {
+                        $abs: {
+                            $subtract: [
+                                { $toDecimal: "$address.pincode" },
+                                { $toDecimal: req.body.address?.pincode }
+                            ]
+                        }
+                    }
                 }
-              }
             },
             {
-              $sort: { pincodeDifference: 1 }
+                $sort: { pincodeDifference: 1 }
             },
             {
-              $limit: 1
+                $limit: 1
             }
-          ]);
+        ]);
 
         const delivery = new deliveryModel({
             _id: new mongoose.Types.ObjectId(),
@@ -254,10 +270,22 @@ router.post("/createOrder",checkAuthUser, async (req, res) => {
         // Save the delivery entry
         await delivery.save();
 
+        const populatedOrder = await orderModel
+            .findById(order._id)
+            .populate({
+                path: "Items.productId",
+                model: "Product",
+                populate: [
+                    { path: "brandId", model: "Brand" },
+                    { path: "categoryId", model: "Category" },
+                    { path: "variantId", model: "Variant" },
+                ],
+            });
+
         res.status(201).json({
             message: "Order created successfully",
             orderDetails: order,
-            orderItems:req.body.items,
+            orderItems: populatedOrder,
             paymentDetails: payment,
             deliveryDetails: delivery,
             deliverypersonInfo: closestDeliveryPerson
@@ -268,13 +296,13 @@ router.post("/createOrder",checkAuthUser, async (req, res) => {
     }
 });
 
-router.post('/add-address',checkAuthUser, async (req, res) => {
+router.post('/add-address', checkAuthUser, async (req, res) => {
 
     try {
 
         const { street, city, pincode, state, country } = req.body;
 
-        const customer = await customerModel.findById({_id:req.user.userId});
+        const customer = await customerModel.findById({ _id: req.user.userId });
 
         if (!customer) {
             return res.status(404).json({ message: 'Customer not found' });
@@ -291,36 +319,107 @@ router.post('/add-address',checkAuthUser, async (req, res) => {
     }
 });
 
-router.patch('/wishlist/add/:id', async (req, res) => {
-    const customerId =  "65598eb04da5c205448d67f0"|| req.user.userId;
-    const productId = req.params.id; 
-  
+router.post('/wishlist/add/:id', checkAuthUser, async (req, res) => {
+    const customerId = req.user.userId;
+    const productId = req.params.id;
+
     try {
-      // Check if the customer and product exist
-      const customer = await customerModel.findById(customerId);
-      const product = await productModel.findById(productId);
-  
-      if (!customer || !product) {
-        return res.status(404).json({ message: 'Customer or Product not found' });
-      }
-      
-      const existingWishlistItem = customer.wishlist.find(item => item.productId.equals(product._id));
+        // Check if the customer and product exist
+        const customer = await customerModel.findById(customerId);
+        const product = await productModel.findById(productId);
 
-      if (existingWishlistItem) {
-        existingWishlistItem.quantity += 1;
-      } else {
-        customer.wishlist.push({ productId: product._id, quantity: 1 });
-      }
-    
-      await customer.save();
-  
-      res.status(200).json({ message: 'Product added to wishlist successfully' });
+        if (!customer || !product) {
+            return res.status(404).json({ message: 'Customer or Product not found' });
+        }
+
+        const existingWishlistItem = customer.wishlist.find(item => item.productId.equals(product._id));
+
+        if (existingWishlistItem) {
+            existingWishlistItem.quantity += 1;
+        } else {
+            customer.wishlist.push({ productId: product._id, quantity: 1 });
+        }
+
+        await customer.save();
+
+        res.status(200).json({ message: 'Product added to wishlist successfully' });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
-  });
-  
+});
 
+router.post('/wishlist/delete/:id', async (req, res) => {
+    const customerId = "65598eb04da5c205448d67f0" || req.user.userId;
+    const productId = req.params.id;
 
-module.exports = router
+    try {
+        // Check if the customer and product exist
+        const customer = await customerModel.findById(customerId);
+
+        if (!customer) {
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+
+        // Find the product in the wishlist
+        const product = customer.wishlist.find(item => item.productId.equals(productId));
+
+        if (product) {
+            // Decrease the quantity by 1
+            product.quantity -= 1;
+
+            // If the quantity is now 0, remove the product from the wishlist
+            if (product.quantity === 0) {
+                customer.wishlist = customer.wishlist.filter(item => !item.productId.equals(productId));
+            }
+
+            await customer.save();
+            return res.status(200).json({ message: 'Product removed from wishlist successfully' });
+        } else {
+            return res.status(404).json({ message: 'Product not found in the wishlist' });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+router.get("/lastOrder", checkAuthUser, async (req, res) => {
+    try {
+        const customer = await customerModel.findById(req.user.userId);
+
+        if (!customer) {
+            return res.status(404).json({ message: "Customer not found" });
+        }
+        if (customer.orderHistory.length === 0) {
+            return res.status(404).json({ message: "No orders found for the customer" });
+        }
+
+        const lastOrderId = customer.orderHistory[customer.orderHistory.length - 1].OrderId;
+
+        const populatedOrder = await orderModel
+            .findById(lastOrderId._id)
+            .populate([{
+                path: "Items.productId",
+                model: "Product",
+                populate: [
+                    { path: "brandId", model: "Brand" },
+                    { path: "categoryId", model: "Category" },
+                    { path: "variantId", model: "Variant" },
+                ]},
+                {  path: "paymentId", model: "Payment"}
+            ]
+            )
+
+        if (!populatedOrder) {
+            return res.status(404).json({ message: "Last order not found" });
+        }
+
+        res.status(200).json({ orderDetails: populatedOrder });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+module.exports = router;
