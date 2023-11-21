@@ -33,7 +33,7 @@ function Home({handleSelectedCategory}) {
                 <div className="cards">
                     <h5 className="title">Womens Ethnic</h5>
                     <div className="image">
-                        <img src="topwear.jpeg" alt="Womens Ethnic"  width="300px" height="320px" />
+                        <img src="EthnicWear.jpg" alt="Womens Ethnic"  width="300px" height="320px" />
                     </div>
                     <div className="more">
                         <button  className="link"  onClick={(e)=>handleCategory("Women's Ethnic")} >See more</button>

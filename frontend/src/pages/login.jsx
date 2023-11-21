@@ -50,7 +50,7 @@ export default function Login() {
         <label htmlFor="password" className="head">Password</label>
         <input type="password" className="form-control-item" id="password" onChange={(e) => handleData('password', e)} />
       </div>
-      <button type="submit" className="btn" onClick={handleLogin}>Login</button>
+      <button type="submit" className="btn-color" onClick={handleLogin}>Login</button>
 
     </div>
 
