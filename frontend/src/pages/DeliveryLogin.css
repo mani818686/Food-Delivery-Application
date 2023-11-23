@@ -1,0 +1,51 @@
+.login-container {
+  width: 400px;
+  margin: auto;
+  padding: 20px 20px 20px 20px;
+  margin-top: 150px;
+  border: 2px solid #ccc;
+  border-radius: 2px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+
+.align {
+text-align: center;
+font-style: normal;
+}
+
+
+.head {
+  display: flex;
+  margin-bottom: 5px;
+  margin-top: 25px;
+}
+
+.form-control-item {
+  width: 195%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  
+}
+
+.btn-color {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  margin-top: 25px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
