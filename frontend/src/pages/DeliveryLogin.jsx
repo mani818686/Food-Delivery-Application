@@ -22,13 +22,12 @@ const defaultUser = { "email": "", "password": "" }
     }))
   }
   const handledeliveryLogin = async () => {
-    const response = await postData("/deliveryInfo/deliverylogin", JSON.stringify(userData))
+    const response = await postData("/delivery/deliverylogin", JSON.stringify(userData))
     if (response.message == "Delivery Auth successful") {
       setuserData(defaultUser)
       dispatch(saveUser(response.userDetails))
       dispatch(setLoggedIn(true))
       dispatch(setAuthToken(response.token))
-      dispatch(addAllproducts(response.userDetails.wishlist))
       localStorage.setItem("userLoggedIn", true);
       localStorage.setItem("authToken", response.token);
       navigate("/")

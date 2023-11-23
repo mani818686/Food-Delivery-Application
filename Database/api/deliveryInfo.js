@@ -69,42 +69,6 @@ router.post("/deliverysignup", (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 router.post("/deliverylogin", (req, res) => {
     deliveryPersonModel.find({ email: req.body.email })
         .then((deliveryPerson) => {
@@ -162,5 +126,4 @@ router.post("/deliverylogin", (req, res) => {
 
 })
 
-
-
+module.exports = router;

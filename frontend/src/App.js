@@ -12,6 +12,8 @@ import Cart from './pages/cart/cart';
 import Checkout from './pages/checkout';
 import Payment from './pages/payment';
 import { useSelector } from 'react-redux';
+import DeliveryLogin from './pages/DeliveryLogin';
+import DeliveryRegister from './pages/DeliveryRegister';
 import Confirmation from './pages/confirmation';
 
 
@@ -44,7 +46,9 @@ const handleOrderDetails = (details)=>{
         <Route exact path="/checkout" element={<Checkout/>}></Route>
         <Route exact path="/payment" element={<Payment handleOrderDetails={handleOrderDetails} />}></Route>
         <Route exact path="/confirmation" element={<Confirmation orderDetails={orderDetails}/>}></Route>
-        </Routes>
+        <Route exact path="/login/delivery" element={<DeliveryLogin/>}></Route>
+        <Route exact path="/register/delivery" element={<DeliveryRegister/>}></Route>
+       </Routes>
     </Router>
     </div>
   );

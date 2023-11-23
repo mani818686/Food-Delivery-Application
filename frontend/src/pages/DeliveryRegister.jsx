@@ -27,10 +27,10 @@ export default function Register() {
   }
   const handleDeliveryRegister = async() =>{
     console.log(userData)
-      const response = await postData("/deliveryInfo/deliverysignup",JSON.stringify(userData))
-      if(response.message == "delivery customer createdd"){
+      const response = await postData("/delivery/deliverysignup",JSON.stringify(userData))
+      if(response.message == "delivery customer created"){
         setuserData(defaultUser)
-        navigate("/")
+        navigate("/login/delivery")
       }
       else{
         console.error(response)
