@@ -34,7 +34,6 @@ const Cart = () => {
             console.error(response);
           }
         }
-        console.log("RTYUIO")
       } catch (error) {
         console.error("Error deleting product:", error);
       }

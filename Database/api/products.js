@@ -8,6 +8,7 @@ const brandModel = require("../models/brand")
 const categoryModel = require('../models/category');
 const variantModel = require("../models/variant")
 const { ObjectId } = require('mongodb');
+const checkAuthAdmin = require("../middleware/checkAuthAdmin");
 
 
 router.post("/addProduct", async (req, res) => {
@@ -128,28 +129,39 @@ router.get('/products', async (req, res) => {
     }
   });
 
+router.get("/products/admin",checkAuthAdmin, async (req, res) => {
+  try {
+    const adminId = req.admin.userId;
 
-//   router.get("/products", async (req, res) => {
-//   const brandName = req.query.brandName; 
+    // Find all products that belong to the specified adminId
+    const products = await productModel.find({ adminId: adminId })
+      .populate("variantId")
+      .populate("categoryId")
+      .populate("brandId");
 
-//   try {
-//     const brand = await brandModel.findOne({ brandName }); 
+    res.status(200).json({ products });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+router.delete("/products/:productId",checkAuthAdmin, async (req, res) => {
+  try {
+    const productId = req.params.productId;
 
-//     if (!brand) {
-//       return res.status(404).json({ error: "Brand not found" });
-//     }
+    const existingProduct = await productModel.findById(productId);
+    if (!existingProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
-//     const products = await productModel.find({ brandId: brand._id })
-//       .populate("variantId")
-//       .populate("categoryId")
-//       .populate("brandId")
-//       .exec();
+    await productModel.findByIdAndDelete(productId);
 
-//     res.json(products);
-//   } catch (error) {
-//     res.status(500).json({ error: "Error fetching products" });
-//   }
-// });
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 
 

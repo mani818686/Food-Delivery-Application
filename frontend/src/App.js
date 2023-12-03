@@ -15,6 +15,13 @@ import { useSelector } from 'react-redux';
 import DeliveryLogin from './pages/DeliveryLogin';
 import DeliveryRegister from './pages/DeliveryRegister';
 import Confirmation from './pages/confirmation';
+import Orders from './pages/orders';
+import OrderDetails from './pages/orderDetails';
+import AdminLogin from './pages/adminlogin';
+import AdminRegister from './pages/adminregister';
+import { RequireAdminAuth } from './adminauth';
+import { RequireUserAuth } from './RequireAuth';
+import Dashboard from './pages/dashboard';
 
 
 function App() {
@@ -41,8 +48,9 @@ const handleOrderDetails = (details)=>{
         <Route exact path="/register" element={<Register/>}></Route>
         <Route exact path="/login" element={<Login/>}></Route>
         <Route exact path="/products" element={<Products category={Category}/>}></Route>
-        <Route exact path="/addProducts" element={<Addproducts/>}></Route>
-        <Route exact path="/cart" element={<Cart/>}></Route>
+        <Route exact path="/cart"
+          element={<Cart/>}>
+         </Route>
         <Route exact path="/checkout" element={<Checkout/>}></Route>
         <Route exact path="/payment" element={<Payment handleOrderDetails={handleOrderDetails} />}></Route>
         <Route exact path="/confirmation" element={<Confirmation orderDetails={orderDetails}/>}></Route>

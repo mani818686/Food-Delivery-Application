@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import axios from "axios";
 import "./addproducts.css";
+import { useNavigate } from 'react-router-dom';
 
 function Addproducts() {
 
+  const navigate = useNavigate();
   const [productData, setProductData] = useState({
     "name": "",
     "description": "",
@@ -42,6 +44,7 @@ function Addproducts() {
     axios.post('http://localhost:5001/api/product/addProduct', productData)
       .then((result) => {
         console.log(result)
+        navigate("/admin/dashboard")
       })
       .catch((error) => {
         console.error(error)

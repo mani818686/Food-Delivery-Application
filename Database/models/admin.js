@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const Product = require("./product")
+
 const adminSchema = mongoose.Schema({
 
     _id: mongoose.Schema.Types.ObjectId,
@@ -22,7 +24,8 @@ const adminSchema = mongoose.Schema({
         pincode: { type: Number },
         state: { type: String },
         country: { type: String }
-    }
+    },
+    products:[{productId: { type: mongoose.Schema.Types.ObjectID, ref: "Product" }}]
 })
 
 module.exports = mongoose.model("Admin", adminSchema);

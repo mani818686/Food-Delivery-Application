@@ -81,7 +81,7 @@ function Checkout() {
                 {userAddreses && userAddreses?.map((address,index)=>{
                     return(
                         <div class="form-check">
-                    <input class="form-check-input" type="radio" name="address" id="address1" value={index} onChange={handleOptionChange} checked={index == selectedAddressIndex }/>
+                    <input class="form-check-input" type="radio" name="address" className="address1" value={index} onChange={handleOptionChange} checked={index == selectedAddressIndex }/>
                     <label class="form-check-label label1" for="address1">
                        <div className="addressContent">
                         {address.street} Street, {address.city}, {address.state}, {address.country}, {address.pincode}

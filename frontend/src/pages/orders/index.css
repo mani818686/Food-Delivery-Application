@@ -1,0 +1,28 @@
+.order-container{
+        margin-top: 8%;
+        margin-left: 30px;
+}
+.order-items{
+    display: flex;
+    flex-wrap: wrap;
+}
+.order-card{
+    border: 1px solid black;
+    margin: 15px;
+    border-radius: 5px;
+    box-shadow: 0.5px 0.5px 0.5px 0.5px black;
+    background-color: white !important;
+    width: 200px;
+    height:300px;
+    padding: 5px;
+    .image{
+        margin: 10px;
+    }
+    .link{
+        background: none;
+        border: none;
+        padding: 0;
+        color: blue;
+        cursor: pointer;
+    }
+}

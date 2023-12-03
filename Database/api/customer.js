@@ -14,7 +14,6 @@ const deliveryPersonModel = require("../models/deliveryPersonInfo");
 const productModel = require("../models/product")
 const checkAuthUser = require("../middleware/checkAuthUser");
 
-
 router.get("/checkUser", checkAuthUser, async (req, res, next) => {
 
     customerModel.find({ _id: req.user.userId }).populate([
@@ -43,6 +42,7 @@ router.get("/checkUser", checkAuthUser, async (req, res, next) => {
         })
 
 })
+
 
 router.post("/signup", (req, res) => {
     console.log("Request Body", req.body)
@@ -350,7 +350,7 @@ router.post('/wishlist/add/:id', checkAuthUser, async (req, res) => {
 });
 
 router.post('/wishlist/delete/:id', async (req, res) => {
-    const customerId = "65598eb04da5c205448d67f0" || req.user.userId;
+    const customerId = req.user.userId;
     const productId = req.params.id;
 
     try {
@@ -416,6 +416,120 @@ router.get("/lastOrder", checkAuthUser, async (req, res) => {
         }
 
         res.status(200).json({ orderDetails: populatedOrder });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.get("/allOrders", checkAuthUser, async (req, res) => {
+    try {
+        const customer = await customerModel.findById(req.user.userId);
+
+        if (!customer) {
+            return res.status(404).json({ message: "Customer not found" });
+        }
+
+        if (customer.orderHistory.length === 0) {
+            return res.status(200).json({ message: "No orders found for the customer", orders: [] });
+        }
+
+        const orderIds = customer.orderHistory.map(order => order.OrderId._id);
+
+        const allOrders = await orderModel
+            .find({ _id: { $in: orderIds } })
+            .populate({
+                path: "Items.productId",
+                model: "Product",
+                populate: [
+                    { path: "brandId", model: "Brand" },
+                    { path: "categoryId", model: "Category" },
+                    { path: "variantId", model: "Variant" },
+                ]
+            })
+            .populate({ path: "paymentId", model: "Payment" });
+
+        if (!allOrders) {
+            return res.status(404).json({ message: "Orders not found" });
+        }
+
+        // Map the orders to include only necessary details
+        const formattedOrders = allOrders.map(order => ({
+            _id: order._id,
+            totalPrice: order.price,
+            address: order.address,
+            products: order.Items.map(item => ({
+                productId: item.productId,
+                name: item.productId.name,
+                price: item.productId.price,
+                // Add other necessary product details here
+            })),
+            paymentDetails: {
+                paymentMethod: order.paymentId.paymentMethod,
+                paymentDetails: order.paymentId.paymentDetails,
+                // Add other necessary payment details here
+            },
+            orderStatus: order.orderStatus,
+            date: order.date,
+            isReturnRequested: order.isReturnRequested,
+        }));
+
+        res.status(200).json({ message: "All orders retrieved successfully", orders: allOrders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.get("/order/:id", checkAuthUser, async (req, res) => {
+    try {
+        const customer = await customerModel.findById(req.user.userId);
+
+        if (!customer) {
+            return res.status(404).json({ message: "Customer not found" });
+        }
+
+        const orderIds = customer.orderHistory.map(order => req.params.id);
+
+        const allOrders = await orderModel
+            .find({ _id: { $in: orderIds } })
+            .populate({
+                path: "Items.productId",
+                model: "Product",
+                populate: [
+                    { path: "brandId", model: "Brand" },
+                    { path: "categoryId", model: "Category" },
+                    { path: "variantId", model: "Variant" },
+                ]
+            })
+            .populate({ path: "paymentId", model: "Payment" });
+
+        if (!allOrders) {
+            return res.status(404).json({ message: "Orders not found" });
+        }
+
+        // Map the orders to include only necessary details
+        const formattedOrders = allOrders.map(order => ({
+            _id: order._id,
+            totalPrice: order.price,
+            address: order.address,
+            products: order.Items.map(item => ({
+                productId: item.productId,
+                name: item.productId.name,
+                price: item.productId.price,
+                // Add other necessary product details here
+            })),
+            paymentDetails: {
+                paymentMethod: order.paymentId.paymentMethod,
+                paymentDetails: order.paymentId.paymentDetails,
+                // Add other necessary payment details here
+            },
+            orderStatus: order.orderStatus,
+            date: order.date,
+            isReturnRequested: order.isReturnRequested,
+        }));
+
+        res.status(200).json({ message: "All orders retrieved successfully", orders: allOrders });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });

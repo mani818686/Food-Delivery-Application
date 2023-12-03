@@ -3,7 +3,6 @@ const JWT = require("jsonwebtoken");
 module.exports = function(req, res, next) {
     const token = req.header("token")
         // console.log(req.header['auth-token'])
-    console.log(token,"Token")
     if (!token) return res.status(401).json({
         message: "Unauthorized access",
     });

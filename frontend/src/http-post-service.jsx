@@ -46,6 +46,28 @@ export const postData = async (url, data) => {
     }
   }
 
+  export const deleteData = async (url)=>{
+    const token = localStorage.getItem("authToken")
+    // console.log(token)
+    try {
+      const response = await fetch("http://localhost:5001/api"+url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          "token": token,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error during DELETE request:', error);
+      throw error; 
+    }
+  }
   
   

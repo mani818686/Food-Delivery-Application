@@ -45,6 +45,7 @@ input[type="radio"]{
 .form-check .form-check-input {
     float: inline-start;
     margin-left: -3.5rem !important;
+    color: #007bff;
 }
 
 .label1 {
