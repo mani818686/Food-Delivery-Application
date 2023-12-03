@@ -39,7 +39,7 @@ export default function Register() {
   }
   return (
   <div class="container">
-    <div class="title">Registration</div>
+    <div class="title">Delivery-Registration</div>
     <div class="content">
         <div class="user-details">
           <div class="input-box">

@@ -29,11 +29,13 @@
 input[type="radio"]{
     display: inline;
 }
-.form-check{
-    border :3px solid whitesmoke !important;
+.form-check{ 
+    border: 3px solid green !important;
     margin: 10px;
-    margin-left: 50px;
+    margin-left: 30px; 
+    display: flex;
 }
+
 .addressContent {
     max-width: 848px;
     text-align: left;
@@ -42,17 +44,26 @@ input[type="radio"]{
     justify-content: space-between;
 }
 
-.form-check .form-check-input {
-    float: inline-start;
-    margin-left: -3.5rem !important;
+ .form-check-inputValue.address1 {
+   float: inline-start;
+    margin-left: -3rem !important;
     color: #007bff;
+
+   
 }
+
+
+
+.form-check-label {
+    float: inline-start;
+     margin-left: 7rem !important;
+    
+ }
 
 .label1 {
-    width: 2000px;
+    width: 80%;
 
 }
-
 
   .input-address {
     display: flex;
@@ -72,12 +83,11 @@ input[type="radio"]{
 }
 
 
-.btn1 {
-    display: block;
-    margin-top: 40px;
-    margin-bottom: 50px;
-   background-color: #007bff;
-  color: white;
+.btnAdress {
+  display: block;
+  margin-top: 40px;
+  margin-bottom: 50px;
+  background-color: #007bff;
   padding: 10px 15px;
   border: none;
   border-radius: 3px;
@@ -85,3 +95,38 @@ input[type="radio"]{
   
     
 }
+
+.btnAdd  {
+    display: block;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    background-color: #007bff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    
+}
+
+.btn1:hover {
+    background-color: blue;
+  }
+
+
+
+  .btnColor {
+    background-color: #007bff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    margin-top: 25px;
+  }
+
+
+  .form-control {
+
+    width: 80%;
+    line-height: 1.8;
+  }

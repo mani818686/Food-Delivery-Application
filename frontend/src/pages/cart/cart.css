@@ -39,3 +39,17 @@ img{
     display: flex;
     flex-direction: row-reverse;
 }
+
+.btnColor {
+    background-color: #007bff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    margin-top: 25px;
+  }
+  
+  .btnColor:hover {
+    background-color: blue;
+  }

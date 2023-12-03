@@ -99,7 +99,7 @@ const Cart = () => {
               <div className="right"> Total Price: $ {Totalprice.toFixed(2)}</div>
             </div>
             <div className='place-order'>
-              <button className="btn btn-primary" onClick={handleOrder}>Place your Order</button>
+              <button className="btnColor" onClick={handleOrder}>Place your Order</button>
             </div>
           </div>
         )}

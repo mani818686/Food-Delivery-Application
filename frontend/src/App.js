@@ -1,4 +1,3 @@
-
 import './App.css';
 import { BrowserRouter as Router ,Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
@@ -22,23 +21,23 @@ import AdminRegister from './pages/adminregister';
 import { RequireAdminAuth } from './adminauth';
 import { RequireUserAuth } from './RequireAuth';
 import Dashboard from './pages/dashboard';
-
-
+ 
+ 
 function App() {
   const [Category, setCategory] = useState("")
-
+ 
   const [orderDetails,setOrderDetails] =useState({})
-
+ 
   const loginDetails = useSelector((state)=>state.login.details)
   console.log(loginDetails)
-
+ 
   const handleCategory = (category) => {
     setCategory(category)
   }
 const handleOrderDetails = (details)=>{
   setOrderDetails(details)
 }
-
+ 
   return (
     <div className="App">
       <Router>
@@ -56,15 +55,33 @@ const handleOrderDetails = (details)=>{
         <Route exact path="/confirmation" element={<Confirmation orderDetails={orderDetails}/>}></Route>
         <Route exact path="/login/delivery" element={<DeliveryLogin/>}></Route>
         <Route exact path="/register/delivery" element={<DeliveryRegister/>}></Route>
-       </Routes>
+        <Route exact path="/orders" element={<Orders/>}></Route>
+        <Route exact path="/order/:orderId" element={<OrderDetails/>}></Route>
+        <Route exact path="/login/admin" element={<AdminLogin/>}></Route>
+        <Route exact path="/signup/admin" element={<AdminRegister/>}></Route>
+        <Route
+          path="/admin/dashboard"
+          element={
+            // <RequireAdminAuth>
+              <Dashboard/>
+            // </RequireAdminAuth>
+          }
+        />
+        <Route
+          path="/addProducts"
+          element={
+            <RequireAdminAuth>
+              <Addproducts />
+            </RequireAdminAuth>
+          }
+        />
+        </Routes>
     </Router>
     </div>
   );
 }
-
+ 
 export default App;
-
-
-
-// Users -> Should Order, Should show the orders, should save the payments 
-//Admin -> Add product -> Done
+ 
+ 
+ 

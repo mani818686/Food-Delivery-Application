@@ -91,14 +91,14 @@ function Payment( {handleOrderDetails}) {
                 </div>
             </div>
             <div className="payment mt-3">
-                <label>Choose your type of Payment</label>
+                <label class="header"><b>Choose your type of Payment</b></label>
                 <select class="form-select" onChange={handlePaymentMethod} value={paymentMethod}>
                     <option value="Debit Card">Debit Card</option>
                     <option value="Credit Card">Credit Card</option>
                 </select>
             </div>
             <div className="payment-details mb-5 mt-3">
-                <h5>Enter your {paymentMethod} Details</h5>
+                <h5 class="align">Enter your {paymentMethod} Details</h5>
                 <div className='card-details'>
                     <div class="mb-3 row">
                         <div class="col-5 flex-column">
@@ -114,7 +114,7 @@ function Payment( {handleOrderDetails}) {
                 </div>
             </div>
             <div>
-                <button className='btn' onClick={handlePayment}>Proceed to Pay ${totalPrice.toFixed(2)}</button>
+                <button className='btnPayment' onClick={handlePayment}>Proceed to Pay ${totalPrice.toFixed(2)}</button>
             </div>
         </div>
     )

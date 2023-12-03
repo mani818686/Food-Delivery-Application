@@ -43,17 +43,17 @@ export default function AdminLogin() {
 
   return (
     <div className='login-container'>
-      <h3 className='align'>Login</h3>
+      <h3 className='center'><u>Admin Login</u></h3>
 
       <div className="form-group">
         <label htmlFor="email" className="head">Email</label>
-        <input type="email" className="form-control-item" id="email" onChange={(e) => handleData('email', e)} />
+        <input type="email" className="form-control-item-lists" id="email" onChange={(e) => handleData('email', e)} />
       </div>
       <div className="form-group">
         <label htmlFor="password" className="head">Password</label>
-        <input type="password" className="form-control-item" id="password" onChange={(e) => handleData('password', e)} />
+        <input type="password" className="form-control-item-lists" id="password" onChange={(e) => handleData('password', e)} />
       </div>
-      <button type="submit" className="btn" onClick={handleLogin}>Login</button>
+      <button type="submit" className="btn-Color" onClick={handleLogin}>Login</button>
 
     </div>
 

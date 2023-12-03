@@ -1,7 +1,9 @@
 .payment-container{
     margin-top: 5%;
     margin-left: 10px;
-    width:80%
+    width:80%;
+   padding-left: 400px;
+   
 }
 
 .payment-header{
@@ -9,4 +11,44 @@
     color: white;
     padding: 10px;
     text-align: left;
+    width: 75%;
+}
+
+
+.btnPayment  {
+    display: block;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    background-color: #007bff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    
+}
+
+.btnPayment:hover  {
+   color: blue;
+    
+}
+
+.form-select {
+    width: 75% !important;
+}
+
+label{
+  
+    display: flex !important;
+}
+
+.align {
+
+    text-align: left !important;
+    margin-top: 40px;
+    text-decoration: underline;
+}
+
+.mb-3 {
+
+    margin-top: 20px;
 }

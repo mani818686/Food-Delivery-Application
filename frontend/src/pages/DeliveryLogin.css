@@ -49,3 +49,14 @@ font-style: normal;
 .btn:hover {
   background-color: #0056b3;
 }
+
+
+
+.form-control-item-lists {
+
+  width: 195%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  
+}

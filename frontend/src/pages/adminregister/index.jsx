@@ -39,7 +39,7 @@ export default function AdminRegister() {
   }
   return (
   <div class="container">
-    <div class="title">Registration</div>
+    <div class="title">Admin Registration</div>
     <div class="content">
         <div class="user-details">
           <div class="input-box">

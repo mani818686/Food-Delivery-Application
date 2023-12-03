@@ -80,9 +80,9 @@ function Checkout() {
             <div className="address-content">
                 {userAddreses && userAddreses?.map((address,index)=>{
                     return(
-                        <div class="form-check">
-                    <input class="form-check-input" type="radio" name="address" className="address1" value={index} onChange={handleOptionChange} checked={index == selectedAddressIndex }/>
-                    <label class="form-check-label label1" for="address1">
+                        <div className="form-check"> 
+                          <input type="radio" className="form-check-input form-check-inputValue address1" name="address"  value={index} onChange={handleOptionChange} checked={index == selectedAddressIndex }/>         
+                    <label class="form-check-label label1" htmlFor="address1">  
                        <div className="addressContent">
                         {address.street} Street, {address.city}, {address.state}, {address.country}, {address.pincode}
                        </div>
@@ -92,15 +92,15 @@ function Checkout() {
                 })  
                 }
             </div>
-            <button className="btn" onClick={handleOrder}>Deliver Here</button>
+            <button className="btnColor btn-primary btn1" onClick={handleOrder}>Deliver Here</button>
             <div className="add-address">
                 {!showAddress && <div className="add-button">
-                    <button className="btn btn-light" onClick={() => setshowAddress((p) => !p)}>Add Address</button>
+                    <button className="btnAdd btn-light" onClick={() => setshowAddress((p) => !p)}>Add Address</button>
                 </div>}
                 {showAddress &&
                     <>
-                              <h5  className="mt-3 p-3" style={{backgroundColor:"white"}}>Enter Delivery Address </h5>
-                        <div className="input-address mt-5 ">
+                              <h5  className="mt-4 p-2" style={{backgroundColor:"cadetblue", width: "90%"}}>Enter Delivery Address </h5>
+                        <div className="input-address mt-4">
                             <div className="form-group">
                             <label htmlFor="Street" className="head">Street</label>
                             <input type="text" className="form-control" id="size" value={address.street} onChange={(e)=>handleAddress("street",e.target.value)}/>
@@ -124,7 +124,7 @@ function Checkout() {
                            
                         </div>
                         <div>
-                         <button className="btn btn-light btn1" onClick={handleaddAddress}>Add Address</button>
+                         <button className="btnColor btn-primary btn1" onClick={handleaddAddress}>Add Address</button>
                          </div> 
                     </>
                 }
