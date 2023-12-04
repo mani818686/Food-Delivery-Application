@@ -31,9 +31,9 @@ export default function AdminLogin() {
       dispatch(setisAdmin(true))
       localStorage.setItem("userLoggedIn", true);
       localStorage.setItem("authToken", response.token);
-      localStorage.setItem("isAdmin", true);
+      localStorage.setItem("userType", 'admin');
       localStorage.setItem("name",response.userDetails.lastName + " "+ response.userDetails.firstName)
-      navigate("/")
+      navigate("/admin/dashboard")
     }
     else {
       console.error(response)

@@ -30,7 +30,7 @@ export default function Login() {
       dispatch(addAllproducts(response.userDetails.wishlist))
       localStorage.setItem("userLoggedIn", true);
       localStorage.setItem("authToken", response.token);
-      localStorage.setItem("isAdmin", false);
+      localStorage.setItem("userType", 'user');
       localStorage.setItem("name",response.userDetails.lastName + " "+ response.userDetails.firstName)
       navigate("/")
     }

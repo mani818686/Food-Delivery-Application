@@ -30,7 +30,9 @@ const defaultUser = { "email": "", "password": "" }
       dispatch(setAuthToken(response.token))
       localStorage.setItem("userLoggedIn", true);
       localStorage.setItem("authToken", response.token);
-      navigate("/")
+      localStorage.setItem("userType", 'Delivery');
+      localStorage.setItem("name",response.userDetails.lastName + " "+ response.userDetails.firstName)
+      navigate("/delivery/dashboard");
     }
     else {
       console.error(response)

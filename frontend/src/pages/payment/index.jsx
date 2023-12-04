@@ -14,7 +14,7 @@ function Payment( {handleOrderDetails}) {
     const [cardCode, setcardCode] = useState('')
     const [error,setError] = useState();
     const cart = Object.values(useSelector(state => state.cart.items));
-    const selectedAddress = useSelector((state)=>state.user.user.selectedAddress)
+    const selectedAddress = useSelector((state)=>state.user.selectedAddress)
     const isLoggedIn = useSelector((state) => state.login.details.isLoggedIn);
 
     const navigate = useNavigate()
@@ -36,6 +36,7 @@ function Payment( {handleOrderDetails}) {
 
     const handlePayment = async () =>{
         const Items = Object.values(cart).map((product)=>({productId:product._id,quantity:product.quantity}))
+        console.log(selectedAddress)
         let orderData ={
             "price":totalPrice,
             "paymentMethod":paymentMethod,

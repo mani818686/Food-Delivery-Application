@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const deliveryPersonModel = require("../models/deliveryPersonInfo");
+const deliveryModel = require("../models/delivery")
+const orderModel = require("../models/order")
+const CheckAuthDelivery = require("../middleware/CheckAuthDelivery");
 
 
 
@@ -125,5 +128,55 @@ router.post("/deliverylogin", (req, res) => {
         })
 
 })
+router.get("/", CheckAuthDelivery, async (req, res) => {
+    try {
+        const delivery = await deliveryPersonModel.findById(req.user.userId)
+        .populate({
+            path:"delivery",
+            model:"Delivery",
+            populate: {
+                path: 'customer',
+                model: 'Customer',
+            }
+        });
+
+        if (!delivery) {
+            return res.status(404).json({ message: "deliveryperson Info not found" });
+        }
+
+        res.status(200).json({ delivery});
+       
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }}
+)
+
+router.post("/update/:deliveryId", CheckAuthDelivery, async (req, res) => {
+    const deliveryId = req.params.deliveryId
+
+
+    try {
+      
+        await deliveryModel.findByIdAndUpdate(deliveryId,{
+            $set:{
+                status:req.body.status
+            }})
+      await orderModel.updateOne({deliveryId:deliveryId},{
+            $set:{
+                orderStatus:req.body.status
+            }
+        })
+        
+        res.status(200).json({ message:'updated'});
+       
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }}
+)
+
 
 module.exports = router;

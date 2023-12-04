@@ -23,6 +23,9 @@ import { RequireUserAuth } from './RequireAuth';
 import Dashboard from './pages/dashboard';
  
  
+import DeliveryDashboard from './pages/deliveryDashboard';
+
+
 function App() {
   const [Category, setCategory] = useState("")
  
@@ -60,11 +63,15 @@ const handleOrderDetails = (details)=>{
         <Route exact path="/login/admin" element={<AdminLogin/>}></Route>
         <Route exact path="/signup/admin" element={<AdminRegister/>}></Route>
         <Route
+          path="/delivery/dashboard"
+          element={
+              <DeliveryDashboard/>
+          }
+        />
+        <Route
           path="/admin/dashboard"
           element={
-            // <RequireAdminAuth>
               <Dashboard/>
-            // </RequireAdminAuth>
           }
         />
         <Route

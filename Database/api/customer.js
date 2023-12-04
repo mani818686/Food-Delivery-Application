@@ -198,7 +198,7 @@ router.post("/login", (req, res) => {
 })
 
 router.post("/createOrder", checkAuthUser, async (req, res) => {
-    console.log(req.body)
+    console.log(req.body,"Order")
     try {
         const payment = new paymentModel({
             _id: new mongoose.Types.ObjectId(),
@@ -228,42 +228,36 @@ router.post("/createOrder", checkAuthUser, async (req, res) => {
 
 
         if (!customer) {
-            return res.status(404).json({ message: 'Customer or Product not found' });
+            return res.status(404).json({ message: 'Customer  not found' });
         }
 
         customer.wishlist = [];
 
         customer.orderHistory.push({ OrderId: order._id });
         await customer.save();
-        const closestDeliveryPerson = await deliveryPersonModel.aggregate([
-            {
-                $addFields: {
-                    pincodeDifference: {
-                        $abs: {
-                            $subtract: [
-                                { $toDecimal: "$address.pincode" },
-                                { $toDecimal: req.body.address?.pincode }
-                            ]
-                        }
-                    }
-                }
-            },
-            {
-                $sort: { pincodeDifference: 1 }
-            },
-            {
-                $limit: 1
-            }
-        ]);
+        let closestDeliveryPerson = await deliveryPersonModel.aggregate([{ $sample: { size: 1 } }]);
+
+
+        const today = new Date();
+        const fiveDaysFromNow = new Date();
+        fiveDaysFromNow.setDate(today.getDate() + 5);
+
+        const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        const formattedDate = fiveDaysFromNow.toLocaleDateString(undefined, options);
+
+      
 
         const delivery = new deliveryModel({
             _id: new mongoose.Types.ObjectId(),
             deliveryPersonId: closestDeliveryPerson._id,
             type: req.body.type,
             address: req.body.address,
-            expectedDeliverydate: req.body.expectedDeliveryDate,
-            status: "Ordered"
+            expectedDeliverydate: formattedDate,
+            status: "Ordered",
+            customer:req.user.userId
         });
+       
+        await deliveryPersonModel.findByIdAndUpdate(closestDeliveryPerson[0]._id, {$push: { delivery:  delivery._id } })
 
         order.deliveryId = delivery._id
         await order.save();
@@ -422,64 +416,6 @@ router.get("/lastOrder", checkAuthUser, async (req, res) => {
     }
 });
 
-router.get("/allOrders", checkAuthUser, async (req, res) => {
-    try {
-        const customer = await customerModel.findById(req.user.userId);
-
-        if (!customer) {
-            return res.status(404).json({ message: "Customer not found" });
-        }
-
-        if (customer.orderHistory.length === 0) {
-            return res.status(200).json({ message: "No orders found for the customer", orders: [] });
-        }
-
-        const orderIds = customer.orderHistory.map(order => order.OrderId._id);
-
-        const allOrders = await orderModel
-            .find({ _id: { $in: orderIds } })
-            .populate({
-                path: "Items.productId",
-                model: "Product",
-                populate: [
-                    { path: "brandId", model: "Brand" },
-                    { path: "categoryId", model: "Category" },
-                    { path: "variantId", model: "Variant" },
-                ]
-            })
-            .populate({ path: "paymentId", model: "Payment" });
-
-        if (!allOrders) {
-            return res.status(404).json({ message: "Orders not found" });
-        }
-
-        // Map the orders to include only necessary details
-        const formattedOrders = allOrders.map(order => ({
-            _id: order._id,
-            totalPrice: order.price,
-            address: order.address,
-            products: order.Items.map(item => ({
-                productId: item.productId,
-                name: item.productId.name,
-                price: item.productId.price,
-                // Add other necessary product details here
-            })),
-            paymentDetails: {
-                paymentMethod: order.paymentId.paymentMethod,
-                paymentDetails: order.paymentId.paymentDetails,
-                // Add other necessary payment details here
-            },
-            orderStatus: order.orderStatus,
-            date: order.date,
-            isReturnRequested: order.isReturnRequested,
-        }));
-
-        res.status(200).json({ message: "All orders retrieved successfully", orders: allOrders });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-});
 
 router.get("/order/:id", checkAuthUser, async (req, res) => {
     try {
@@ -533,6 +469,28 @@ router.get("/order/:id", checkAuthUser, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.get('/orders',checkAuthUser, async (req, res) => {
+
+    try {
+        const orders = await orderModel.find({ customerId: req.user.userId })
+            .populate({
+                path: "Items.productId",
+                model: "Product",
+                populate: [
+                    { path: "brandId", model: "Brand" },
+                    { path: "categoryId", model: "Category" },
+                    { path: "variantId", model: "Variant" },
+                ]
+            })
+
+
+        res.status(200).json({ orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 

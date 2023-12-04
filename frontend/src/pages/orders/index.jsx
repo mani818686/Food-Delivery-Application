@@ -9,7 +9,7 @@ function Orders() {
   useEffect(() => {
     const getOrderData = async () => {
       try {
-        const data = await getData("/customer/allOrders");
+        const data = await getData("/customer/orders");
         setOrderData(data.orders);
         console.log(data.orders)
       } catch (error) {
@@ -31,9 +31,9 @@ function Orders() {
         {orderData && orderData?.map((order, index) => (
           <div className="order-card" key={index} onClick={()=>handleOrder(order)}>
             {order.Items.length === 1 ? (
-              <img src={"/uploads/"+order.Items[0]?.productId?.image}  width="80px" height={"60px"} alt={"uploads/"+order.Items[0].productId.image} />
+              <img src={"/uploads/"+order.Items[0]?.productId?.image}  width="80px" height={"60px"} alt={"uploads/"+order.Items[0]?.productId?.image} />
             ) : (
-              <img src={"/uploads/"+order.Items[0]?.productId?.image} width="80px" height="60px" alt={"/uploads/"+order.Items[0].productId.image} 
+              <img src={"/uploads/"+order.Items[0]?.productId?.image} width="80px" height="60px" alt={"/uploads/"+order.Items[0]?.productId?.image} 
               />
             )}
             <div className="order-details">

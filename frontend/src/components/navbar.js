@@ -6,7 +6,7 @@ function Navbar() {
     
     const name = localStorage.getItem("name") || lastName +" "+firstName
     const loggedIn =localStorage.getItem("userLoggedIn")
-    const isAdmin = localStorage.getItem("isAdmin") == "true"
+    const userType = localStorage.getItem("userType")
     
     const navigate = useNavigate()
 
@@ -20,7 +20,9 @@ function Navbar() {
             <div className="container-fluid">
                 <a className="navbar-brand" href="/">E-Commerce Fashion</a>
                 <div className="d-flex">
-                {loggedIn && !(isAdmin) &&  <Link className="navbar-brand" to="/cart">Cart</Link>}
+                {loggedIn && userType=='user' &&  <Link className="navbar-brand" to="/cart">Cart</Link>}
+                {loggedIn && userType=='user'  &&  <Link className="navbar-brand" to="/orders">My Orders</Link>}
+                {loggedIn && userType=='admin'  &&  <Link className="navbar-brand" to="/addProducts">Add Product</Link>}
                 {loggedIn && <div className="navbar-brand"> Welcome, {name}</div>}
                 {!loggedIn && <Link className="navbar-brand" to="/login">Login</Link>}
                {!loggedIn &&  <Link className="navbar-brand" to="/register">Register</Link>}
