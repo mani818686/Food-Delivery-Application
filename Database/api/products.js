@@ -11,7 +11,7 @@ const { ObjectId } = require('mongodb');
 const checkAuthAdmin = require("../middleware/checkAuthAdmin");
 
 
-router.post("/addProduct", async (req, res) => {
+router.post("/addProduct",checkAuthAdmin, async (req, res) => {
 
     try {
         const variant = await variantModel.findOne({
@@ -62,7 +62,7 @@ router.post("/addProduct", async (req, res) => {
             variantId: newVariant ? newVariant._id : variant._id,
             categoryId: newCategory?newCategory._id:category._id,
             brandId: newBrand?newBrand._id:brand._id,
-            adminId: "653da2e7efe05ef4270de4f5" /// Need to change 
+            adminId: req.admin.userId /// Need to change 
         });
         console.log(newProduct)
         await newProduct.save();

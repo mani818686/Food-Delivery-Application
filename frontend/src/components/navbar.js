@@ -26,6 +26,10 @@ function Navbar() {
                 {loggedIn && <div className="navbar-brand"> Welcome, {name}</div>}
                 {!loggedIn && <Link className="navbar-brand" to="/login">Login</Link>}
                {!loggedIn &&  <Link className="navbar-brand" to="/register">Register</Link>}
+               {!loggedIn && <Link className="navbar-brand" to="/login/admin">Admin Login</Link>}
+               {!loggedIn &&  <Link className="navbar-brand" to="/signup/admin">Admin Register</Link>}
+               {/* {!loggedIn && <Link className="navbar-brand" to="/login/delivery">Delivery Login</Link>}
+               {!loggedIn &&  <Link className="navbar-brand" to="/register/delivery">Delivery Register</Link>} */}
                {loggedIn &&  <div className="navbar-brand"  onClick={handleLogout}>Logout</div>}
                 </div>
             </div>
