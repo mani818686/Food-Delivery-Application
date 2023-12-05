@@ -2,6 +2,7 @@ import { useState } from 'react'
 import axios from "axios";
 import "./addproducts.css";
 import { useNavigate } from 'react-router-dom';
+import { postData } from '../../http-post-service';
 
 function Addproducts() {
 
@@ -21,7 +22,7 @@ function Addproducts() {
       ...data,
       "image": event.target.files[0].name
     }))
-    handleFileUpload(event.target.files[0])
+    // handleFileUpload(event.target.files[0])
   };
 
   const handleFileUpload = (fileData) => {
@@ -38,17 +39,17 @@ function Addproducts() {
         })
     }
   };
-  const handleAddProduct = () => {
+  const handleAddProduct = async() => {
 
     console.log(productData)
-    axios.post('http://localhost:5001/api/product/addProduct', productData)
-      .then((result) => {
-        console.log(result)
-        navigate("/admin/dashboard")
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+
+
+    let response = await postData("/product/addProduct",JSON.stringify(productData))
+    console.log(response)
+    if(response.message =='Product created successfully'){
+      navigate("/admin/dashboard")
+    }
+    
   }
   const handleData = (column, e) => {
     setProductData((data) => ({

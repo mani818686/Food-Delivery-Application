@@ -42,7 +42,7 @@ export default function Login() {
 
   return (
     <div className='login-container'>
-      <h3 className='center'><u>Login</u></h3>
+      <h3 className='center'><u>Customer Login</u></h3>
 
       <div className="form-group">
         <label htmlFor="email" className="head">Email</label>
