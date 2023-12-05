@@ -79,7 +79,7 @@ function Addproducts() {
       </div>
       <div className="form-group">
         <label htmlFor="size" className="head">Category</label>
-        <select class="form-select form-control-styles" onChange={(e) => handleData("categoryName", e)}>
+        <select class="form-control-styles" onChange={(e) => handleData("categoryName", e)}>
           <option value="Men's Top Wear">Men's Top Wear</option>
           <option value="Men's Bottom Wear">Men's Bottom Wear</option>
           <option value="Women's Ethnic">Women's Ethnic</option>

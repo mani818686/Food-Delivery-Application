@@ -48,3 +48,8 @@ font-style: normal;
 .btn:hover {
   background-color: #0056b3;
 }
+
+
+.form-group {
+  width:50% !important;
+}
