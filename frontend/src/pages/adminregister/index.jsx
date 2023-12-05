@@ -83,7 +83,7 @@ export default function AdminRegister() {
             <input type="text" placeholder="Enter your Country" onChange={(e)=>handleData('country',e)} required/>
           </div> 
           <div class="input-box">
-            <span class="details">PinCode</span>
+            <span class="details">Zip Code</span>
             <input type="text" placeholder="Enter your PinCode" onChange={(e)=>handleData('pincode',e)} required/>
           </div> 
         </div>
