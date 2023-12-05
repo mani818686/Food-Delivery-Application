@@ -343,7 +343,7 @@ router.post('/wishlist/add/:id', checkAuthUser, async (req, res) => {
     }
 });
 
-router.post('/wishlist/delete/:id', async (req, res) => {
+router.post('/wishlist/delete/:id', checkAuthUser, async (req, res) => {
     const customerId = req.user.userId;
     const productId = req.params.id;
 
