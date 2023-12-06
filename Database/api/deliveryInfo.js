@@ -35,6 +35,13 @@ router.post("/deliverysignup", (req, res) => {
                             email: req.body.email,
                             password: hash,
                             phoneNumber: req.body.phoneNumber,
+                            address: {
+                                "street": req.body.street,
+                                "city": req.body.city,
+                                "state": req.body.state,
+                                "country": req.body.country,
+                                "pincode": req.body.pincode
+                            },
                         };
 
                         var ti = new deliveryPersonModel(deliveryPerson);
@@ -49,6 +56,13 @@ router.post("/deliverysignup", (req, res) => {
                                         email: req.body.email,
                                         password: hash,
                                         phoneNumber: req.body.phoneNumber,
+                                        address: {
+                                            "street": req.body.street,
+                                            "city": req.body.city,
+                                            "state": req.body.state,
+                                            "country": req.body.country,
+                                            "pincode": req.body.pincode
+                                        },
                                     },
                                 })
                             })
