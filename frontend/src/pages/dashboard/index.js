@@ -86,13 +86,7 @@ function Dashboard({ category }) {
                 </div>
                 <div className="right">
                   <div className='size'>Size: {product.variantId.size}</div>
-                  <div>
-                  <button
-                      className='add-product-btn btn btn-primary'
-                      onClick={() => handleDelete(product._id)}
-                    ><DeleteIcon /> 
-                    </button>
-                    
+                  <div>   
                     {/* {cart[product._id]?.quantity > 0 && <div>Quantity : {cart[product._id]?.quantity ?? 0}</div>} */}
                   </div>
                 </div>

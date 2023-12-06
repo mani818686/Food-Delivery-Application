@@ -9,8 +9,10 @@ const paymentSchema = mongoose.Schema({
    date:{type:Date, default: Date.now},
    amount:{type:Number,required:true},
    paymentMethod:{type:String, required:true},
-   paymentDetails:{type:String,required:true}
-    
+   cardNumber:{type:String,required:true},
+   securitycode:{type:String,required:true},
+   cardName:{type:String,required:true},
+   expiryCode :{type:String,required:true}
 })
 
 module.exports = mongoose.model("Payment", paymentSchema);

@@ -197,6 +197,7 @@ router.post("/login", (req, res) => {
 
 })
 
+
 router.post("/createOrder", checkAuthUser, async (req, res) => {
     console.log(req.body,"Order")
     try {
@@ -205,7 +206,10 @@ router.post("/createOrder", checkAuthUser, async (req, res) => {
             orderId: null,
             amount: req.body.price,
             paymentMethod: req.body.paymentMethod,
-            paymentDetails: req.body.paymentDetails,
+            cardNumber: req.body.cardNumber,
+            securitycode:req.body.securitycode,
+            cardName:req.body.cardName,
+            expiryCode:req.body.expiryCode
         });
 
         await payment.save();

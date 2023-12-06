@@ -14,7 +14,8 @@ function Addproducts() {
     "color": "",
     "brandName": "",
     "categoryName": "Men's Top Wear",
-    "image": ""
+    "image": "",
+    "price":""
   })
 
   const handleFileChange = (event) => {
@@ -42,8 +43,6 @@ function Addproducts() {
   const handleAddProduct = async() => {
 
     console.log(productData)
-
-
     let response = await postData("/product/addProduct",JSON.stringify(productData))
     console.log(response)
     if(response.message =='Product created successfully'){
@@ -56,6 +55,7 @@ function Addproducts() {
       ...data,
       [column]: e.target.value
     }))
+
   }
   return (
     <div className='login-container-item'>
@@ -64,19 +64,14 @@ function Addproducts() {
           <label htmlFor="name" className="head">Product Name</label>
           <input type="text" className="form-control-styles" id="name" onChange={(e) => handleData('name', e)} />
         </div>
-      
-
       <div className="form-group">
         <label htmlFor="desc" className="head">Product Description</label>
         <input type="text" className="form-control-styles" id="desc" onChange={(e) => handleData('description', e)} />
       </div>
+      
       <div className="form-group">
         <label htmlFor="image" className="head">Upload Product Image</label>
         <input type="file" className="form-control-styles" accept="image/png, image/gif, image/jpeg" id="image" onChange={handleFileChange} />
-      </div>
-      <div className="form-group">
-        <label htmlFor="price" className="head">Price</label>
-        <input type="text" className="form-control-styles" id="price" onChange={(e) => handleData('price', e)} />
       </div>
       <div className="form-group">
         <label htmlFor="size" className="head">Category</label>
@@ -95,12 +90,17 @@ function Addproducts() {
         <label htmlFor="brand" className="head">Brand Name</label>
         <input type="text" className="form-control-styles" id="brand" onChange={(e) => handleData('brandName', e)} />
       </div>
-      <div className="form-group">
-        <label htmlFor="size" className="head">Size</label>
+
+      <div className="form-group size">
+        <label htmlFor="size" className="head">Size(s) (give in comma seperated)</label>
         <input type="text" className="form-control-styles" id="size" onChange={(e) => handleData('size', e)} />
       </div>
-      <div className="form-group">
-        <label htmlFor="color" className="head">Color</label>
+      <div className="form-group size">
+        <label htmlFor="price" className="head">Price(s) (give in comma seperated)</label>
+        <input type="text" className="form-control-styles" id="price" onChange={(e) => handleData('price', e)} />
+      </div>
+      <div className="form-group size">
+        <label htmlFor="color" className="head">Color(s) (give in comma seperated)</label>
         <input type="text" className="form-control-styles" id="color" onChange={(e) => handleData('color', e)} />
       </div>
 

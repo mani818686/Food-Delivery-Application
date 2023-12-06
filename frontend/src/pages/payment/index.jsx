@@ -12,6 +12,8 @@ function Payment( {handleOrderDetails}) {
     const [paymentMethod, setPaymentMethod] = useState('Debit Card')
     const [cardNumber, setcardNumber] = useState('')
     const [cardCode, setcardCode] = useState('')
+    const [cardName, setcardName] = useState('')
+    const [cardExpiry, setcardExpiry] = useState('')
     const [error,setError] = useState();
     const cart = Object.values(useSelector(state => state.cart.items));
     const selectedAddress = useSelector((state)=>state.user.selectedAddress)
@@ -33,6 +35,12 @@ function Payment( {handleOrderDetails}) {
     const handleCardCode = (e) => {
         setcardCode(e.target.value)
     }
+    const handleCardExpiry = (e) => {
+        setcardExpiry(e.target.value)
+    }
+    const handleCardName = (e) => {
+        setcardName(e.target.value)
+    }
 
     const handlePayment = async () =>{
         const Items = Object.values(cart).map((product)=>({productId:product._id,quantity:product.quantity}))
@@ -40,7 +48,10 @@ function Payment( {handleOrderDetails}) {
         let orderData ={
             "price":totalPrice,
             "paymentMethod":paymentMethod,
-            "paymentDetails":cardNumber+"-"+cardCode,
+            "cardNumber":cardNumber,
+            "securitycode":cardCode,
+            "cardName":cardName,
+            "expiryCode":cardExpiry,
             "items":Items,
             "address":selectedAddress,
             "type":"Express Delivery"
@@ -101,16 +112,27 @@ function Payment( {handleOrderDetails}) {
             <div className="payment-details mb-5 mt-3">
                 <h5 class="align">Enter your {paymentMethod} Details</h5>
                 <div className='card-details'>
-                    <div class="mb-3 row">
+                <div class="mb-3 row">
                         <div class="col-5 flex-column">
-                            <label htmlFor="cardNumber"> Card Number</label>
-                            <input type="text" class="form-control" id="cardNumber" maxLength={13} minLength={10} value={cardNumber} pattern="[0-9]+" onChange={handleCardDetails} />
+                            <label htmlFor="cardName"> Name on the Card</label>
+                            <input type="text" class="form-control" id="cardName" value={cardName} onChange={handleCardName} />
                         </div>
                         <div class="col-5 flex-column">
-                        <label htmlFor="code">Security Code</label>
-                        <input type="text" class="form-control" id="code" value={cardCode} maxLength={3} minLength={3} pattern="[0-9]+" onChange={handleCardCode} />
+                        <label htmlFor="code"> Card Number</label>
+                        <input type="text" class="form-control" id="code" value={cardNumber} maxLength={19} minLength={16} pattern="[0-9]+" onChange={handleCardDetails} />
                     </div>
                     </div>
+                    <div class="mb-3 row">
+                        <div class="col-5 flex-column">
+                            <label htmlFor="cardNumber">Expiry Date</label>
+                            <input type="text" class="form-control" id="cardNumber" placeholder="MM/YY"  value={cardExpiry}  onChange={handleCardExpiry} />
+                        </div>
+                        <div class="col-5 flex-column">
+                        <label htmlFor="codeN">Security Code</label>
+                        <input type="text" class="form-control" id="codeN"  value={cardCode} maxLength={3} minLength={3} pattern="[0-9]+" onChange={handleCardCode} />
+                    </div>
+                    </div>
+                    
                    
                 </div>
             </div>

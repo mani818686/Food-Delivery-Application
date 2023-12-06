@@ -3,6 +3,7 @@ import { addAllproducts, addProduct, deleteProduct, setTotalPrice } from '../../
 import "./cart.css";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import { setAuthToken, setLoggedIn } from '../../loginSlice';
 import { getData, postData } from '../../http-post-service';
 import { useEffect } from 'react';
@@ -36,6 +37,21 @@ const Cart = () => {
         }
       } catch (error) {
         console.error("Error deleting product:", error);
+      }
+    };
+
+    const handleAddCart = async(product) => {
+    
+      if (isLoggedIn && token) {
+          const response = await postData("/customer/wishlist/add/"+product._id)
+          if(response.message == "Product added to wishlist successfully"){
+            dispatch(addProduct(product));
+          }
+          else{
+            console.error(response)
+          }
+      } else {
+        navigate("/login");
       }
     };
 
@@ -76,8 +92,13 @@ const Cart = () => {
                 <div className="details">
                   <div className="left">
                     <img width="100px" height="100px" alt={product.name} src={"/uploads/" + product.image} />
+                    <div style={{display:'flex'}}>
+                    <div className='delete'>
+                      <AddIcon onClick={() => handleAddCart(product)} />
+                    </div>
                     <div className='delete'>
                       <DeleteIcon onClick={() => handleDeleteProduct(product)} />
+                    </div>
                     </div>
                   </div>
                   <div className="right">

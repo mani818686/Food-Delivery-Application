@@ -14,6 +14,7 @@ const checkAuthAdmin = require("../middleware/checkAuthAdmin");
 router.post("/addProduct",checkAuthAdmin, async (req, res) => {
 
     try {
+
         const variant = await variantModel.findOne({
             size: req.body.size,
             color: req.body.color
@@ -52,6 +53,7 @@ router.post("/addProduct",checkAuthAdmin, async (req, res) => {
             });
             await newCategory.save();
         }
+        
 
         const newProduct = new productModel({
             _id: new ObjectId(),
@@ -78,56 +80,212 @@ router.post("/addProduct",checkAuthAdmin, async (req, res) => {
     }
 });
 
-router.get('/products', async (req, res) => {
-  console.log(req.query)
-    try {
-      const filters = {}; // Initialize an empty filter object
-        console.log(req.query)
-      // Check if the request includes filters for size, color, categoryName, or brandName
-      if (req.query.size) {
-        const variant = await variantModel.findOne({ size: req.query.size });
-        console.log("Size",variant)
-        if (variant) {
-          filters['variantId'] = variant._id;
-        }
-      }
+// router.get('/products', async (req, res) => {
+//   console.log(req.query)
+//     try {
+//       const filters = {}; // Initialize an empty filter object
+//         console.log(req.query)
+//       // Check if the request includes filters for size, color, categoryName, or brandName
+//       if (req.query.size) {
+//         const variant = await variantModel.findOne({ size: req.query.size });
+//         console.log("Size",variant)
+//         if (variant) {
+//           filters['variantId'] = variant._id;
+//         }
+//       }
   
-      if (req.query.color) {
-        const variant = await variantModel.findOne({ color: req.query.color });
-        console.log("Color",variant)
-        if (variant) {
-          filters['variantId'] = variant._id;
-        }
-      }
+//       if (req.query.color) {
+//         const variant = await variantModel.findOne({ color: req.query.color });
+//         console.log("Color",variant)
+//         if (variant) {
+//           filters['variantId'] = variant._id;
+//         }
+//       }
   
-      if (req.query.categoryName) {
-        const category = await categoryModel.findOne({ categoryName: req.query.categoryName });
-        console.log("Category",category)
-        if (category) {
-          filters['categoryId'] = category._id;
-        }
-      }
+//       if (req.query.categoryName) {
+//         const category = await categoryModel.findOne({ categoryName: req.query.categoryName });
+//         console.log("Category",category)
+//         if (category) {
+//           filters['categoryId'] = category._id;
+//         }
+//       }
   
-      if (req.query.brandName) {
-        const brand = await brandModel.findOne({ brandName: req.query.brandName });
-        console.log("Brand",brand)
-        if (brand) {
-          filters['brandId'] = brand._id;
-        }
-      }
-      console.log("filters----",filters)
+//       if (req.query.brandName) {
+//         const brand = await brandModel.findOne({ brandName: req.query.brandName });
+//         console.log("Brand",brand)
+//         if (brand) {
+//           filters['brandId'] = brand._id;
+//         }
+//       }
+//       console.log("filters----",filters)
      
-      const products = await productModel.find(filters)
-      .populate("variantId")
-      .populate("categoryId")
-      .populate("brandId")
-      .exec();
-      res.status(200).json({ products });
+//       const products = await productModel.find(filters)
+//       .populate("variantId")
+//       .populate("categoryId")
+//       .populate("brandId")
+//       .exec();
+//       res.status(200).json({ products });
 
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+//     } catch (error) {
+//       res.status(500).json({ error: error.message });
+//     }
+//   });
+
+// router.get('/products', async (req, res) => {
+//   try {
+//     const filters = {}; // Initialize an empty filter object
+
+//     // Check if the request includes filters for size, color, categoryName, or brandName
+//     if (req.query.size) {
+//       const variant = await variantModel.findOne({ size: req.query.size });
+//       if (variant) {
+//         filters['variantId'] = variant._id;
+//       }
+//     }
+
+//     if (req.query.color) {
+//       const variant = await variantModel.findOne({ color: req.query.color });
+//       if (variant) {
+//         filters['variantId'] = variant._id;
+//       }
+//     }
+
+//     if (req.query.categoryName) {
+//       const category = await categoryModel.findOne({ categoryName: req.query.categoryName });
+//       if (category) {
+//         filters['categoryId'] = category._id;
+//       }
+//     }
+
+//     if (req.query.brandName) {
+//       const brand = await brandModel.findOne({ brandName: req.query.brandName });
+//       if (brand) {
+//         filters['brandId'] = brand._id;
+//       }
+//     }
+
+//     const products = await productModel.aggregate([
+//       {
+//         $match: filters,
+//       },
+//       {
+//         $lookup: {
+//           from: 'variants',
+//           localField: 'variantId',
+//           foreignField: '_id',
+//           as: 'variants',
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: '$name',
+//           products: {
+//             $push: {
+//               _id: '$_id',
+//               name: '$name',
+//               image: '$image',
+//               description: '$description',
+//               price: '$price',
+//               variants: '$variants',
+//             },
+//           },
+//         },
+//       },
+//     ]);
+
+//     res.status(200).json({ products });
+
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+router.get('/products', async (req, res) => {
+  try {
+    const filters = {}; // Initialize an empty filter object
+
+    // Check if the request includes filters for size, color, categoryName, or brandName
+    if (req.query.size) {
+      const variant = await variantModel.findOne({ size: req.query.size });
+      if (variant) {
+        filters['variantId'] = variant._id;
+      }
     }
-  });
+
+    if (req.query.color) {
+      const variant = await variantModel.findOne({ color: req.query.color });
+      if (variant) {
+        filters['variantId'] = variant._id;
+      }
+    }
+
+    if (req.query.categoryName) {
+      const category = await categoryModel.findOne({ categoryName: req.query.categoryName });
+      if (category) {
+        filters['categoryId'] = category._id;
+      }
+    }
+
+    if (req.query.brandName) {
+      const brand = await brandModel.findOne({ brandName: req.query.brandName });
+      if (brand) {
+        filters['brandId'] = brand._id;
+      }
+    }
+
+    const products = await productModel.aggregate([
+      {
+        $match: filters,
+      },
+      {
+        $lookup: {
+          from: 'variants',
+          localField: 'variantId',
+          foreignField: '_id',
+          as: 'variants',
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'categoryId',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      {
+        $lookup: {
+          from: 'brands',
+          localField: 'brandId',
+          foreignField: '_id',
+          as: 'brand',
+        },
+      },
+      {
+        $group: {
+          _id: '$name',
+          products: {
+            $push: {
+              _id: '$_id',
+              name: '$name',
+              image: '$image',
+              description: '$description',
+              price: '$price',
+              variants: '$variants',
+              category: { $arrayElemAt: ['$category', 0] },
+              brand: { $arrayElemAt: ['$brand', 0] },
+            },
+          },
+        },
+      },
+    ]);
+
+    res.status(200).json({ products });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 router.get("/products/admin",checkAuthAdmin, async (req, res) => {
   try {
