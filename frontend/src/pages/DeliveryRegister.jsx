@@ -10,11 +10,11 @@ export default function Register() {
   "password":"",
   "Confirmpassword":"",
   "phoneNumber":"",
-  // "street":"",
-  // "city":"",
-  // "state":"",
-  // "country":"",
-  // "pincode":""
+  "street":"",
+   "city":"",
+  "state":"",
+  "country":"",
+   "pincode":""
 }
   const [userData,setuserData] = useState(defaultUser);
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ export default function Register() {
             <span class="details">Phone Number</span>
             <input type="tel" placeholder="Enter your number" onChange={(e)=>handleData('phoneNumber',e)} required/>
           </div>  
-          {/* <div class="input-box">
+         <div class="input-box">
             <span class="details">Street</span>
             <input type="text" placeholder="Enter your street" onChange={(e)=>handleData('street',e)} required/>
           </div> 
@@ -83,9 +83,9 @@ export default function Register() {
             <input type="text" placeholder="Enter your Country" onChange={(e)=>handleData('country',e)} required/>
           </div> 
           <div class="input-box">
-            <span class="details">PinCode</span>
+            <span class="details">ZipCode</span>
             <input type="text" placeholder="Enter your PinCode" onChange={(e)=>handleData('pincode',e)} required/>
-          </div>  */}
+          </div>  
         </div>
         <div class="button">
           <input type="submit"  value="Register" onClick={handleDeliveryRegister}/>

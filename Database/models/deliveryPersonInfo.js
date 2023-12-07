@@ -14,6 +14,13 @@ const deliveryPersonInfoSchema = mongoose.Schema({
         match: /^([7-9][0-9]{9})$/g,
     },
     password:{ type: String, required: true },
+    address: [{
+        street: { type: String },
+        city: { type: String },
+        pincode: { type: String },
+        state: { type: String },
+        country: { type: String }
+    }],
     delivery:[ { type: mongoose.Schema.Types.ObjectId, ref: "Delivery" }]
 
 })
