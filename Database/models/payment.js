@@ -12,7 +12,8 @@ const paymentSchema = mongoose.Schema({
    cardNumber:{type:String,required:true},
    securitycode:{type:String,required:true},
    cardName:{type:String,required:true},
-   expiryCode :{type:String,required:true}
+   expiryCode :{type:String,required:true},
+   status :{type:String,default:"success"}
 })
 
 module.exports = mongoose.model("Payment", paymentSchema);

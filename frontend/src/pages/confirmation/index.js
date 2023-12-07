@@ -1,25 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import "./index.css";
-import { getData } from '../../http-post-service';
+import { getData } from "../../http-post-service";
 
 function Confirmation({ orderDetails }) {
   const [orderData, setOrderData] = useState(orderDetails ?? {});
 
-  const [orderItems,setOrderItems] = useState(orderDetails.orderItems?.Items)
+  const [orderItems, setOrderItems] = useState(
+    orderDetails.orderDetails?.Items
+  );
+  console.log(orderItems);
 
-  const [paymentDetails ,setPaymentDetails ] = useState(orderDetails.paymentDetails)
+  const [paymentDetails, setPaymentDetails] = useState(
+    orderDetails.paymentDetails
+  );
 
   useEffect(() => {
-    console.log(Object.keys(orderDetails).length)
+    console.log(Object.keys(orderDetails).length);
     const getOrderData = async () => {
-      if (Object.keys(orderDetails).length == 0 ) {
+      if (Object.keys(orderDetails).length == 0) {
         try {
           let result = await getData("/customer/lastOrder");
           console.log(result);
           setOrderData(result);
           console.log(result.orderDetails.Items);
-          setOrderItems(result.orderDetails.Items)
-          setPaymentDetails(result.orderDetails.paymentId)
+          setOrderItems(result.orderDetails.Items);
+          setPaymentDetails(result.orderDetails.paymentId);
         } catch (error) {
           console.error("Error fetching order data:", error);
         }
@@ -30,10 +35,12 @@ function Confirmation({ orderDetails }) {
   }, []); // Empty dependency array to run the effect only once
 
   return (
-    <div className='confirmation-container'>
+    <div className="confirmation-container">
       <div style={styles.container}>
         <h2 style={styles.header}>Order Confirmation</h2>
-        <p style={styles.message}>Thank you for your order! Your purchase is now confirmed.</p>
+        <p style={styles.message}>
+          Thank you for your order! Your purchase is now confirmed.
+        </p>
         <p style={styles.message}>You will receive your order shortly..</p>
 
         <div style={styles.section}>
@@ -48,8 +55,24 @@ function Confirmation({ orderDetails }) {
           <h3 style={styles.subHeader}>Order Items:</h3>
           <ul style={styles.list}>
             {orderItems?.map((item) => (
-              <li key={item.productId?._id}>
-                {item.productId?.name} - ${item.productId?.price}
+              <li key={item.productId?._id} style={{display:'flex',justifyContent:'space-around'}}>
+                  <div>
+                    <strong>Product Name </strong>
+                    {item.productId?.name}{" "}
+                  </div>
+                  <div>
+                    <strong>Price </strong>${item.variantId?.price}
+                  </div>
+                  <div>
+                    <strong>Size </strong>: {item.variantId?.size}
+                  </div>
+                  <div>
+                    <strong>Color </strong>: {item.variantId?.color}
+                  </div>
+                  <p>
+                    <strong>quantity </strong>: {item.quantity}
+                  </p>
+               
               </li>
             ))}
           </ul>
@@ -73,24 +96,24 @@ export default Confirmation;
 
 const styles = {
   container: {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '20px',
+    maxWidth: "800px",
+    margin: "0 auto",
+    padding: "20px",
   },
   header: {
-    color: '#333',
+    color: "#333",
   },
   message: {
-    color: 'green',
+    color: "green",
   },
   section: {
-    marginBottom: '20px',
+    marginBottom: "20px",
   },
   subHeader: {
-    color: '#333',
+    color: "#333",
   },
   list: {
-    listStyle: 'none',
+    listStyle: "none",
     padding: 0,
   },
 };

@@ -92,18 +92,19 @@ function Addproducts() {
       </div>
 
       <div className="form-group size">
-        <label htmlFor="size" className="head">Size(s) (give in comma seperated)</label>
+        <label htmlFor="size" className="head">Size(s) </label>
         <input type="text" className="form-control-styles" id="size" onChange={(e) => handleData('size', e)} />
       </div>
       <div className="form-group size">
-        <label htmlFor="price" className="head">Price(s) (give in comma seperated)</label>
-        <input type="text" className="form-control-styles" id="price" onChange={(e) => handleData('price', e)} />
-      </div>
-      <div className="form-group size">
-        <label htmlFor="color" className="head">Color(s) (give in comma seperated)</label>
+        <label htmlFor="color" className="head">Color(s) </label>
         <input type="text" className="form-control-styles" id="color" onChange={(e) => handleData('color', e)} />
       </div>
 
+      <div className="form-group size">
+        <label htmlFor="price" className="head">Price(s) </label>
+        <input type="text" className="form-control-styles" id="price" onChange={(e) => handleData('price', e)} />
+      </div>
+     
       <button className="btn-color" onClick={handleAddProduct} >Add Product</button>
     </div>
   )

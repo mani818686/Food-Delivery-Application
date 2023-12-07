@@ -29,6 +29,9 @@ router.get("/checkUser", checkAuthUser, async (req, res, next) => {
         {
             path: 'orderHistory.OrderId',
             model: 'Order',
+        },{
+            path: 'wishlist.variantId',
+            model: 'Variant', 
         }])
         .then((result) => {
             res.status(200).json({
@@ -134,6 +137,10 @@ router.post("/login", (req, res) => {
         {
             path: 'orderHistory.OrderId',
             model: 'Order',
+        },
+        {
+            path: 'wishlist.variantId',
+            model: 'Variant', 
         }])
         .then((customer) => {
             if (customer.length < 1) {
@@ -239,54 +246,62 @@ router.post("/createOrder", checkAuthUser, async (req, res) => {
 
         customer.orderHistory.push({ OrderId: order._id });
         await customer.save();
-        let closestDeliveryPerson = await deliveryPersonModel.aggregate([{ $sample: { size: 1 } }]);
+        // let closestDeliveryPerson = await deliveryPersonModel.aggregate([{ $sample: { size: 1 } }]);
 
 
-        const today = new Date();
-        const fiveDaysFromNow = new Date();
-        fiveDaysFromNow.setDate(today.getDate() + 5);
+        // const today = new Date();
+        // const fiveDaysFromNow = new Date();
+        // fiveDaysFromNow.setDate(today.getDate() + 5);
 
-        const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-        const formattedDate = fiveDaysFromNow.toLocaleDateString(undefined, options);
+        // const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        // const formattedDate = fiveDaysFromNow.toLocaleDateString(undefined, options);
 
       
 
-        const delivery = new deliveryModel({
-            _id: new mongoose.Types.ObjectId(),
-            deliveryPersonId: closestDeliveryPerson._id,
-            type: req.body.type,
-            address: req.body.address,
-            expectedDeliverydate: formattedDate,
-            status: "Ordered",
-            customer:req.user.userId
-        });
+        // const delivery = new deliveryModel({
+        //     _id: new mongoose.Types.ObjectId(),
+        //     deliveryPersonId: closestDeliveryPerson._id,
+        //     type: req.body.type,
+        //     address: req.body.address,
+        //     expectedDeliverydate: formattedDate,
+        //     status: "Ordered",
+        //     customer:req.user.userId
+        // });
        
-        await deliveryPersonModel.findByIdAndUpdate(closestDeliveryPerson[0]._id, {$push: { delivery:  delivery._id } })
+        // await deliveryPersonModel.findByIdAndUpdate(closestDeliveryPerson[0]._id, {$push: { delivery:  delivery._id } })
 
-        order.deliveryId = delivery._id
-        await order.save();
-        // Save the delivery entry
-        await delivery.save();
+        // order.deliveryId = delivery._id
+        // await order.save();
+        // // Save the delivery entry
+        // await delivery.save();
 
-        const populatedOrder = await orderModel
-            .findById(order._id)
-            .populate({
-                path: "Items.productId",
-                model: "Product",
-                populate: [
-                    { path: "brandId", model: "Brand" },
-                    { path: "categoryId", model: "Category" },
-                    { path: "variantId", model: "Variant" },
-                ],
-            });
+        // const populatedOrder = await orderModel
+        //     .findById(order._id)
+        //     .populate({
+        //         path: "Items.productId",
+        //         model: "Product",
+        //         populate: [
+        //             { path: "brandId", model: "Brand" },
+        //             { path: "categoryId", model: "Category" },
+        //             { path: "variantId", model: "Variant" },
+        //         ],
+        //     });
+
+        const orderDetails  = await orderModel.findById(order._id).populate([{
+            path: "Items.productId",
+            model: "Product",
+            populate: [
+                { path: "brandId", model: "Brand" },
+                { path: "categoryId", model: "Category" },
+            ]
+        },{
+           path: "Items.variantId", model: "Variant" ,
+        }])
 
         res.status(201).json({
             message: "Order created successfully",
-            orderDetails: order,
-            orderItems: populatedOrder,
-            paymentDetails: payment,
-            deliveryDetails: delivery,
-            deliverypersonInfo: closestDeliveryPerson
+            orderDetails: orderDetails,
+            paymentDetails: payment
         });
     } catch (error) {
         console.error(error);
@@ -317,9 +332,10 @@ router.post('/add-address', checkAuthUser, async (req, res) => {
     }
 });
 
-router.post('/wishlist/add/:id', checkAuthUser, async (req, res) => {
+router.post('/wishlist/add/:productId/:variantId', checkAuthUser, async (req, res) => {
     const customerId = req.user.userId;
-    const productId = req.params.id;
+    const productId = req.params.productId;
+    const variantId = req.params.variantId;
 
     try {
         // Check if the customer and product exist
@@ -330,12 +346,12 @@ router.post('/wishlist/add/:id', checkAuthUser, async (req, res) => {
             return res.status(404).json({ message: 'Customer or Product not found' });
         }
 
-        const existingWishlistItem = customer.wishlist.find(item => item.productId.equals(product._id));
+        const existingWishlistItem = customer.wishlist.find(item => item.productId.equals(product._id) && item.variantId.equals(variantId));
 
         if (existingWishlistItem) {
             existingWishlistItem.quantity += 1;
         } else {
-            customer.wishlist.push({ productId: product._id, quantity: 1 });
+            customer.wishlist.push({ productId: product._id,variantId:variantId, quantity: 1 });
         }
 
         await customer.save();
@@ -347,10 +363,10 @@ router.post('/wishlist/add/:id', checkAuthUser, async (req, res) => {
     }
 });
 
-router.post('/wishlist/delete/:id', checkAuthUser, async (req, res) => {
+router.post('/wishlist/delete/:productId/:variantId', checkAuthUser, async (req, res) => {
     const customerId = req.user.userId;
-    const productId = req.params.id;
-
+    const productId = req.params.productId;
+    const variantId = req.params.variantId;
     try {
         // Check if the customer and product exist
         const customer = await customerModel.findById(customerId);
@@ -360,7 +376,7 @@ router.post('/wishlist/delete/:id', checkAuthUser, async (req, res) => {
         }
 
         // Find the product in the wishlist
-        const product = customer.wishlist.find(item => item.productId.equals(productId));
+        const product = customer.wishlist.find(item => item.productId.equals(productId) && item.variantId.equals(variantId));
 
         if (product) {
             // Decrease the quantity by 1
@@ -368,7 +384,7 @@ router.post('/wishlist/delete/:id', checkAuthUser, async (req, res) => {
 
             // If the quantity is now 0, remove the product from the wishlist
             if (product.quantity === 0) {
-                customer.wishlist = customer.wishlist.filter(item => !item.productId.equals(productId));
+                customer.wishlist = customer.wishlist.filter(item => !item.productId.equals(productId) && !item.variantId.equals(variantId) );
             }
 
             await customer.save();
@@ -402,10 +418,10 @@ router.get("/lastOrder", checkAuthUser, async (req, res) => {
                 model: "Product",
                 populate: [
                     { path: "brandId", model: "Brand" },
-                    { path: "categoryId", model: "Category" },
-                    { path: "variantId", model: "Variant" },
+                    { path: "categoryId", model: "Category" }
                 ]},
-                {  path: "paymentId", model: "Payment"}
+                {  path: "paymentId", model: "Payment"},
+                { path: "Items.variantId", model: "Variant" },
             ]
             )
 
@@ -433,42 +449,19 @@ router.get("/order/:id", checkAuthUser, async (req, res) => {
 
         const allOrders = await orderModel
             .find({ _id: { $in: orderIds } })
-            .populate({
+            .populate([{
                 path: "Items.productId",
                 model: "Product",
                 populate: [
                     { path: "brandId", model: "Brand" },
                     { path: "categoryId", model: "Category" },
-                    { path: "variantId", model: "Variant" },
                 ]
-            })
+            },{ path: "Items.variantId", model: "Variant" }])
             .populate({ path: "paymentId", model: "Payment" });
 
         if (!allOrders) {
             return res.status(404).json({ message: "Orders not found" });
         }
-
-        // Map the orders to include only necessary details
-        const formattedOrders = allOrders.map(order => ({
-            _id: order._id,
-            totalPrice: order.price,
-            address: order.address,
-            products: order.Items.map(item => ({
-                productId: item.productId,
-                name: item.productId.name,
-                price: item.productId.price,
-                // Add other necessary product details here
-            })),
-            paymentDetails: {
-                paymentMethod: order.paymentId.paymentMethod,
-                paymentDetails: order.paymentId.paymentDetails,
-                // Add other necessary payment details here
-            },
-            orderStatus: order.orderStatus,
-            date: order.date,
-            isReturnRequested: order.isReturnRequested,
-        }));
-
         res.status(200).json({ message: "All orders retrieved successfully", orders: allOrders });
     } catch (error) {
         console.error(error);
@@ -480,16 +473,16 @@ router.get('/orders',checkAuthUser, async (req, res) => {
 
     try {
         const orders = await orderModel.find({ customerId: req.user.userId })
-            .populate({
+            .populate([{
                 path: "Items.productId",
                 model: "Product",
                 populate: [
                     { path: "brandId", model: "Brand" },
                     { path: "categoryId", model: "Category" },
-                    { path: "variantId", model: "Variant" },
                 ]
-            })
-
+            },{
+               path: "Items.variantId", model: "Variant" ,
+            }])
 
         res.status(200).json({ orders });
     } catch (error) {

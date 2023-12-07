@@ -5,6 +5,10 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
 const adminModel = require("../models/admin")
+const checAuthAdmin = require("../middleware/checkAuthAdmin")
+
+const orderModel =  require("../models/order")
+const paymentModel = require("../models/payment")
 
 router.post("/signup", (req, res) => {
     adminModel.find({ email: req.body.email })
@@ -130,5 +134,70 @@ router.post("/login", (req, res) => {
 
 })
 
+router.get('/orders',checAuthAdmin, async (req, res) => {
+
+    try {
+        const orders = await orderModel.find({})
+            .populate([{
+                path: "Items.productId",
+                model: "Product",
+                populate: [
+                    { path: "brandId", model: "Brand" },
+                    { path: "categoryId", model: "Category" },
+                ]
+            },{
+               path: "Items.variantId", model: "Variant" ,
+            },{
+                path:"paymentId",
+                model:"Payment"
+            },{
+                path:"customerId",
+                model:"Customer"
+            }])
+
+        res.status(200).json({ orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+router.post('/cancelorder/:orderId',checAuthAdmin, async (req, res) => {
+    const orderId = req.params.orderId;
+
+   try {
+    const updatedOrder = await orderModel.findOneAndUpdate(
+      { _id: orderId },
+      { $set: { orderStatus: req.body.status } },
+      { new: true }
+    );
+
+    if (updatedOrder) {
+        return res.status(200).json({ message: "order Cancelled" });
+    } else {
+        return res.status(500).json({ message: "order not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: err });
+  }
+});
+router.post('/refund/:paymentId',checAuthAdmin, async (req, res) => {
+    const paymentId = req.params.paymentId;
+
+   try {
+    const updatedOrder = await paymentModel.findOneAndUpdate(
+      { _id: paymentId },
+      { $set: { status: "refunded" } },
+      { new: true }
+    );
+
+    if (updatedOrder) {
+        return res.status(200).json({ message: "order Cancelled" });
+    } else {
+        return res.status(500).json({ message: "order not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: err });
+  }
+});
 
 module.exports = router

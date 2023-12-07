@@ -39,10 +39,11 @@ function OrderDetails() {
           <div className="product-card" key={index}>
             <img src={"/uploads/"+item.productId.image} width="300px" height = "300px "alt={item.productId.name} />
             <div className="product-info">
-              <p>Product: {item.productId.name}</p>
-              <p>Price: ${item.productId.price.toFixed(2)}</p>
-              <p>Variant: {item.productId.variantId.size} - {item.productId.variantId.color}</p>
-              <p>Quantity: {item.quantity}</p>
+              <p><strong>Product Name</strong>: {item.productId.name}</p>
+              <p><strong>Price</strong>: ${item.variantId.price.toFixed(2)}</p>
+              <p><strong>Variant</strong>: {item.variantId.size}</p>
+              <p><strong>Color</strong>:   {item.variantId.color}</p>
+              <p><strong>Quantity</strong>: {item.quantity}</p>
             </div>
           </div>
         ))}

@@ -43,7 +43,7 @@ function Payment( {handleOrderDetails}) {
     }
 
     const handlePayment = async () =>{
-        const Items = Object.values(cart).map((product)=>({productId:product._id,quantity:product.quantity}))
+        const Items = Object.values(cart).map((product)=>({productId:product.product._id,variantId:product.variant._id,quantity:product.quantity}))
         console.log(selectedAddress)
         let orderData ={
             "price":totalPrice,
@@ -54,7 +54,6 @@ function Payment( {handleOrderDetails}) {
             "expiryCode":cardExpiry,
             "items":Items,
             "address":selectedAddress,
-            "type":"Express Delivery"
         }
         try {
             const result = await postData('/customer/createOrder',JSON.stringify(orderData) );

@@ -24,6 +24,9 @@ import Dashboard from './pages/dashboard';
  
  
 import DeliveryDashboard from './pages/deliveryDashboard';
+import ProductDetails from './pages/productDetails';
+import UserProductDetails from './pages/userProductDetails';
+import AdminOrders from './pages/adminOrders';
 
 
 function App() {
@@ -59,6 +62,9 @@ const handleOrderDetails = (details)=>{
         <Route exact path="/login/delivery" element={<DeliveryLogin/>}></Route>
         <Route exact path="/register/delivery" element={<DeliveryRegister/>}></Route>
         <Route exact path="/orders" element={<Orders/>}></Route>
+        <Route exact path="/admin/orders" element={<AdminOrders/>}></Route>
+
+       
         <Route exact path="/order/:orderId" element={<OrderDetails/>}></Route>
         <Route exact path="/login/admin" element={<AdminLogin/>}></Route>
         <Route exact path="/signup/admin" element={<AdminRegister/>}></Route>
@@ -72,6 +78,18 @@ const handleOrderDetails = (details)=>{
           path="/admin/dashboard"
           element={
               <Dashboard/>
+          }
+        />
+         <Route
+          path="/admin/productUpdate/:productId"
+          element={
+              <ProductDetails/>
+          }
+        />
+         <Route
+          path="/productDetails/:productId"
+          element={
+              <UserProductDetails/>
           }
         />
         <Route

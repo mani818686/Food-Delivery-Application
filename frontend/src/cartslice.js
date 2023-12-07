@@ -8,33 +8,38 @@ export const cartSlice = createSlice({
   },
   reducers: {
     addProduct:(state,action) =>{
-      const product = action.payload
-      const quantity = state.items[product._id]?.quantity ?? 0
-      console.log(state.items[product._id])
+      console.log(action.payload)
+      const data = action.payload;
+      let variant = {...data.variant};
+      let product = {...data.product};
+      product["productId"] = product._id
+      variant["variantId"] = variant._id
+      const quantity = state.items[variant._id]?.quantity ?? 0
       if(quantity>0)
-        state.items[product._id] =  {...state.items[product._id],"quantity":quantity+1}
+        state.items[variant._id] =  {...state.items[variant._id],"quantity":quantity+1}
       else 
-        state.items[product._id] = {...product,"quantity":1}
+        state.items[variant._id] = {product:product,variant:variant,"quantity":1}
       },
     deleteProduct:(state,action) =>{
-      const product = action.payload
-      const quantity = state.items[product._id]?.quantity ?? 0
+      const variant = action.payload;
+      const quantity = state.items[variant._id]?.quantity ?? 0
       if(quantity>0)
-      state.items[product._id].quantity =quantity-1
+      state.items[variant._id].quantity = quantity-1
       else
-        delete state.items[action.payload._id]
+        delete state.items[variant._id]
     },
     setTotalPrice : (state,action)=>{
       state.price = action.payload
     },
     addAllproducts:(state,action)=>{
       const products=action.payload
+      // console.log()
       console.log(products)
       const result={}
-      let price =0 
+      let price = 0
       products.forEach(product => {
-         result[product.productId._id] = {...product.productId,"quantity":product.quantity}
-         price += product.productId.price * product.quantity
+         result[product.variantId._id] = {product:product.productId, variant:product.variantId,"quantity":product.quantity}
+         price += product.variantId.price * product.quantity
       });
       state.items = result
       state.price =price

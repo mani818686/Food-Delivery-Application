@@ -17,6 +17,7 @@ const orderSchema = mongoose.Schema({
     paymentId:{type:mongoose.Schema.Types.ObjectID, ref:"Payment"},
     Items:[{
         productId: {type:mongoose.Schema.Types.ObjectID, ref:"Product"},
+        variantId: { type: mongoose.Schema.Types.ObjectID, ref: "Variant" },
         quantity:{type:Number,required:true,default:1},
     }
     ],

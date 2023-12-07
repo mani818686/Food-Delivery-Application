@@ -23,6 +23,7 @@ function Navbar() {
                 {loggedIn && userType=='user' &&  <Link className="navbar-brand" to="/cart">Cart</Link>}
                 {loggedIn && userType=='user'  &&  <Link className="navbar-brand" to="/orders">My Orders</Link>}
                 {loggedIn && userType=='admin'  &&  <Link className="navbar-brand" to="/addProducts">Add Product</Link>}
+                {loggedIn && userType=='admin'  &&  <Link className="navbar-brand" to="/admin/orders">Orders</Link>}
                 {loggedIn && <div className="navbar-brand"> Welcome, {name}</div>}
                 {!loggedIn && <Link className="navbar-brand" to="/login">Login</Link>}
                {!loggedIn &&  <Link className="navbar-brand" to="/register">Register</Link>}
