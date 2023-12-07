@@ -142,6 +142,19 @@ router.post("/deliverylogin", (req, res) => {
         })
 
 })
+router.get("/all", async (req, res) => {
+    try {
+        const delivery = await deliveryPersonModel.find({})
+        if (!delivery) {
+            return res.status(404).json({ message: "deliveryperson Info not found" });
+        }
+        res.status(200).json({ delivery});
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }}
+)
 router.get("/", CheckAuthDelivery, async (req, res) => {
     try {
         const delivery = await deliveryPersonModel.findById(req.user.userId)

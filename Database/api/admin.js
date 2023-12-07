@@ -5,10 +5,13 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
 const adminModel = require("../models/admin")
-const checAuthAdmin = require("../middleware/checkAuthAdmin")
+const checkAuthAdmin = require("../middleware/checkAuthAdmin")
 
 const orderModel =  require("../models/order")
 const paymentModel = require("../models/payment")
+const customerModel = require("../models/customer")
+const deliveryModel = require("../models/delivery")
+const deliveryPersonModel = require("../models/deliveryPersonInfo")
 
 router.post("/signup", (req, res) => {
     adminModel.find({ email: req.body.email })
@@ -134,7 +137,7 @@ router.post("/login", (req, res) => {
 
 })
 
-router.get('/orders',checAuthAdmin, async (req, res) => {
+router.get('/orders',checkAuthAdmin, async (req, res) => {
 
     try {
         const orders = await orderModel.find({})
@@ -161,7 +164,7 @@ router.get('/orders',checAuthAdmin, async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-router.post('/cancelorder/:orderId',checAuthAdmin, async (req, res) => {
+router.post('/cancelorder/:orderId',checkAuthAdmin, async (req, res) => {
     const orderId = req.params.orderId;
 
    try {
@@ -180,7 +183,54 @@ router.post('/cancelorder/:orderId',checAuthAdmin, async (req, res) => {
     return res.status(500).json({ message: err });
   }
 });
-router.post('/refund/:paymentId',checAuthAdmin, async (req, res) => {
+
+router.post('/approve/:orderId/:deliverypersonId',checkAuthAdmin ,async (req, res) => {
+    const orderId = req.params.orderId;
+    const deliverypersonId = req.params.deliverypersonId
+   try {
+
+    const order = await orderModel.findOne({ _id: orderId })
+
+    const today = new Date();
+    const fiveDaysFromNow = new Date();
+    fiveDaysFromNow.setDate(today.getDate() + 2);
+
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    const formattedDate = fiveDaysFromNow.toLocaleDateString(undefined, options);
+
+    const delivery = new deliveryModel({
+        _id: new mongoose.Types.ObjectId(),
+        deliveryPersonId: deliverypersonId,
+        type: "Express Delivery",
+        address: order.address,
+        expectedDeliverydate: formattedDate,
+        status: "Ordered",
+        customer:order.customerId
+    });
+
+    const updatedOrder = await orderModel.findOneAndUpdate(
+      { _id: orderId },
+      { $set: { orderStatus: "Approved" } },
+      { new: true }
+    );
+    
+    await deliveryPersonModel.findByIdAndUpdate(deliverypersonId, {$push: { delivery:  delivery._id } })
+    order.deliveryId = delivery._id
+        await order.save();
+      
+        await delivery.save();
+
+
+    if (updatedOrder) {
+        return res.status(200).json({ message: "order updated" });
+    } else {
+        return res.status(500).json({ message: "order not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+});
+router.post('/refund/:paymentId',checkAuthAdmin, async (req, res) => {
     const paymentId = req.params.paymentId;
 
    try {

@@ -84,7 +84,7 @@ export default function Register() {
           </div> 
           <div class="input-box">
             <span class="details">Zip Code</span>
-            <input type="text" placeholder="Enter your PinCode" onChange={(e)=>handleData('pincode',e)} required/>
+            <input type="text" placeholder="Enter your ZipCode" onChange={(e)=>handleData('pincode',e)} required/>
           </div> 
         </div>
         <div class="button">
