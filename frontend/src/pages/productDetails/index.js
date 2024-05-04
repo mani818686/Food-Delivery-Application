@@ -5,37 +5,34 @@ import { getData, postData } from "../../http-post-service";
 import EditIcon from "@mui/icons-material/Edit";
 
 function ProductDetails() {
-  const { productId } = useParams(); // Get the order ID from the URL parameter
-  const [productDetails, setProductDetails] = useState([]);
+  const { productId } = useParams(); 
+  const [productDetails, setProductDetails] = useState({});
   const [show, setShow] = useState(false);
   const [price, setPrice] = useState(0);
 
-  const handleUpdatePrice = async() => {
-    const variantId = show;
+  const handleUpdatePrice = async () => {
     const updatedProduct = {
       ...productDetails,
-      variantId: productDetails.variantId.map((variant) =>
-        variant._id === variantId
-          ? { ...variant, price: +(price) }
-          : variant
-      ),
+        price:price
     };
     setShow(false);
-    try{
-        let response = await postData("/product/updatePrice/"+productDetails._id+"/"+show,JSON.stringify({price:price}))
-        if(response.message === "Variant price updated successfully"){
-            setProductDetails(updatedProduct);
-        }
-    }
-    catch(e){
-        console.log(e)
+    try {
+      let response = await postData(
+        "/foodItem/updatePrice/" + productDetails._id,
+        JSON.stringify({ price: price })
+      );
+      if (response.message === "price updated successfully") {
+        setProductDetails(updatedProduct);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
   useEffect(() => {
     const getOrderDetails = async () => {
       try {
-        const data = await getData(`/product/${productId}`);
+        const data = await getData(`/foodItem/${productId}`);
         setProductDetails(data.products[0]);
         console.log(data.products[0]);
       } catch (error) {
@@ -53,69 +50,52 @@ function ProductDetails() {
 
   return (
     <div className="product-container">
-      <h2>Product Details</h2>
+      <h2>FoodItem Details</h2>
+      {console.log(productDetails.Category?.categoryName)}
       <h2>Name : {productDetails.name}</h2>
       <img
         width="300px"
         height="300px"
         src={"/uploads/" + productDetails.image}
+        // src="https://picsum.photos/seed/picsum/200/300"
         alt={productDetails.name}
       />
       <p>Description: {productDetails.description}</p>
-      <p>Category: {productDetails.categoryId?.categoryName}</p>
-      <p>Brand: {productDetails.brandId?.brandName}</p>
-      <h3>Variants:</h3>
-      <div>
-        {productDetails?.variantId &&
-          productDetails?.variantId.map((variant, index) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: "10px",
-              }}
-            >
-              <div key={variant._id}>
-                {index + 1} : Size: {variant.size}, Color: {variant.color},
-                Price: ${variant.price}
-              </div>
-              <div>
-                <button
-                className="btn btn-primary"
-                  style={{ marginLeft: "30px" }}
-                  onClick={() => handleEdit(variant._id)}
-                >
-                  <EditIcon />
-                </button>
-              </div>
-            </div>
-          ))}
+      <p>Category: {productDetails.Category?.categoryName}</p>
+      <p>Price : {productDetails.price} </p>
+      <p>
+        <button
+          className="button-edit"
+          style={{ marginLeft: "30px" }}
+          onClick={() => handleEdit(productDetails._id)}
+        >
+          <EditIcon />
+        </button> 
+        </p>
 
-        {show && (
-          <div className="my-container">
-            <div className="form-group">
-              <label htmlFor="email" className="head">
-                Price
-              </label>
-              <input
-                type="email"
-                className="form-control-item-lists"
-                value={price}
-                id="email"
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </div>
-            <button
-              className="btn-Color"
-              style={{ marginLeft: "30px" }}
-              onClick={handleUpdatePrice}
-            >
-              Update Price
-            </button>
+      {show && (
+        <div className="my-container">
+          <div className="form-group">
+            <label htmlFor="email" className="head">
+              Price
+            </label>
+            <input
+              type="email"
+              className="form-control-item-lists"
+              value={price}
+              id="email"
+              onChange={(e) => setPrice(e.target.value)}
+            />
           </div>
-        )}
-      </div>
+          <button
+            className="active"
+            style={{ marginLeft: "30px" }}
+            onClick={handleUpdatePrice}
+          >
+            Update Price
+          </button>
+        </div>
+      )}
     </div>
   );
 }

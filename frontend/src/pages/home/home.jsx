@@ -1,93 +1,36 @@
-import "./home.css"
-import { useNavigate} from "react-router-dom"
-function Home({handleSelectedCategory}) {
+import { useNavigate } from "react-router-dom";
+import "./home.css";
+function Home() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const handleCategory=(category)=>{
+      navigate("/menu")
+  }
 
-    const handleCategory=(category)=>{
-        handleSelectedCategory(category)
-        navigate("/products")
-    }
+  return (
+    <div className="home-container">
+     <div>
+      
+      {/* Landing Page Content */}
+      <div className="my-5">
+        <h1 className="mb-4">Discover our Food Items</h1>
 
-    return (
-        <div className='home-container'>
-            <div className="categories-card">
-                <div className="cards">
-                    <h5 className="title">Mens Top Wear</h5>
-                    <div className="image">
-                        <img src="MensTopwear.jpeg" alt="Mens Top Wear" width="300px" height="320px" />
-                    </div>
-                    <div className="more">
-                        <button className="link" onClick={(e)=>handleCategory("Men's Top Wear")}>See more</button>
-                    </div>
-                </div>
-                <div className="cards">
-                    <h5 className="title">Mens Bottom Wear</h5>
-                    <div className="image">
-                        <img src="MensBottomwear.jpeg" alt="Mens Bottom Wear" width="300px" height="320px" />
-                    </div>
-                    <div className="more">
-                        <button  className="link" onClick={(e)=>handleCategory("Men's Bottom Wear")}>See more</button>
-                    </div>
-                </div>
-                <div className="cards">
-                    <h5 className="title">Womens Ethnic</h5>
-                    <div className="image">
-                        <img src="EthnicWear.jpeg" alt="Womens Ethnic"  width="300px" height="320px" />
-                    </div>
-                    <div className="more">
-                        <button  className="link"  onClick={(e)=>handleCategory("Women's Ethnic")} >See more</button>
-                    </div>
-                </div>
-                <div className="cards">
-                    <h5 className="title">Womens Western</h5>
-                    <div className="image">
-                        <img src="WomensWesternWear.jpeg" alt="Womens Western" width="300px" height="320px" />
-                    </div>
-                    <div className="more">
-                        <button  className="link" onClick={(e)=>handleCategory("Women's Western")} >See more</button>
-                    </div>
-                </div>
-                <div className="cards">
-                    <h5 className="title">Mens FootWear</h5>
-                    <div className="image">
-                        <img src="MenFootwear.jpeg" alt="Mens Footwear" width="300px" height="320px" />
-                    </div>
-                    <div className="more">
-                        <button  className="link" onClick={(e)=>handleCategory("Men's Footwear")} >See more</button>
-                    </div>
-                </div>
-                <div className="cards">
-                    <h5 className="title">Womens FootWear</h5>
-                    <div className="image">
-                        <img src="FemaleFootwear.jpeg" alt="WoMens Footwear" width="300px" height="320px" />
-                    </div>
-                    <div className="more">
-                        <button  className="link" onClick={(e)=>handleCategory("Women's Footwear")}>See more</button>
-                    </div>
-                </div>
-                <div className="cards">
-                    <h5 className="title">Kids Wear</h5>
-                    <div className="image">
-                        <img src="KidsWear.jpeg" alt="Kids wear" width="300px" height="320px" />
-                    </div>
-                    <div className="more">
-                        <button  className="link" onClick={(e)=>handleCategory("Kids Wear")} >See more</button>
-                    </div>
-                </div>
-                <div className="cards">
-                    <h5 className="title">Accessories</h5>
-                    <div className="image">
-                        <img src="Accessories.jpeg" alt="Accessories" width="300px" height="320px" />
-                    </div>
-                    <div className="more">
-                        <button  className="link" onClick={(e)=>handleCategory("Accessories")}>See more</button>
-                    </div>
-                </div>
-            </div>
-               
+        <div className="row align-items-center">
+          <div className="col-md-6">
+            <h2 className="mb-3">Our Web Application</h2>
+            <p>
+            Our platform offers a seamless food experience. With a decentralized system, we ensure fast, reliable, and global delivery options for everyone. Dive into the future of food technology.
+            </p>
+            <button  onClick={handleCategory} className="btn btn-dark">See Menu</button>
+          </div>
+          <div className="col-md-6">
+            <img src="food.png" alt="Food Items" className=" border-0 img-fluid" />
+          </div>
         </div>
-    )
+      </div>
+    </div>
+    </div>
+  );
 }
 
-export default Home
+export default Home;

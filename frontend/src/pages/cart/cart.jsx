@@ -15,7 +15,7 @@ const Cart = () => {
 
   const cartItems = Object.values(cart)
   console.log(cartItems)
-  const Totalprice = cartItems?.reduce((acc, product) => acc + (product.variant.price*product.quantity), 0);
+  const Totalprice = cartItems?.reduce((acc, product) => acc + (product.product.price*product.quantity), 0);
 
   const isLoggedIn = useSelector((state) => state.login.details.isLoggedIn);
 
@@ -23,13 +23,11 @@ const Cart = () => {
   const token = localStorage.getItem("authToken")
 
   const navigate = useNavigate();
-  const handleAddCart = async (product,variant) => {
-
-    const response = await postData("/customer/wishlist/add/" + product._id+"/"+variant._id);
-    if (response.message === "Product added to wishlist successfully") {
+  const handleAddCart = async (product) => {
+    const response = await postData("/customer/wishlist/add/" + product._id);
+    if (response.message === "Food Item added to wishlist successfully") {
      let data ={
       "product":product,
-      "variant":variant
      }
      console.log(data)
       dispatch(addProduct(data))
@@ -37,14 +35,14 @@ const Cart = () => {
       console.error(response);
     }
   }
-  const handleDeleteCart = async (productId,variant) => {
+  const handleDeleteCart = async (product) => {
     try {
     
         const response = await postData(
-          "/customer/wishlist/delete/" + productId + "/"+variant._id
+          "/customer/wishlist/delete/" + product._id
         );
-        if (response.message === "Product removed from wishlist successfully") {
-          dispatch(deleteProduct(variant));
+        if (response.message === "FoodItem removed from wishlist successfully") {
+          dispatch(deleteProduct(product));
         } else {
           console.error(response);
         }
@@ -82,6 +80,7 @@ const Cart = () => {
   } 
   return  (
     <div className='cart-container'>
+      <h1>Cart</h1>
       <div className="cart-items">
         {cartItems &&
           cartItems
@@ -90,23 +89,25 @@ const Cart = () => {
               <div className="item" key={product._id}>
                 <div className="details">
                   <div className="left">
-                    <img width="100px" height="100px" alt={product.product.name} src={"/uploads/" + product.product.image} />
+                    <img width="100px" height="100px" alt={product.product.name} 
+                    src={"/uploads/" + product.product.image}
+                    // src="https://picsum.photos/seed/picsum/200/300"
+                     />
                     <div style={{display:'flex'}}>
                     <div className='delete'>
-                      <AddIcon onClick={() => handleAddCart(product.product,product.variant)} />
+                      <AddIcon onClick={() => handleAddCart(product.product)} />
                     </div>
                     <div className='delete'>
-                      <DeleteIcon onClick={() => handleDeleteCart(product.product._id,product.variant)} />
+                      <DeleteIcon onClick={() => handleDeleteCart(product.product)} />
                     </div>
                     </div>
                   </div>
+                  {console.log(product)}
                   <div className="right">
                     <div className='product-name'>{product.product.name}</div>
-                    <div className='size'>Size: {product.variant.size}</div>
-                    <div className="color">Color: {product.variant.color}</div>
                   </div>
                 </div>
-                <div className="price">Price: $ {product.variant.price}</div>
+                <div className="price">Price: $ {product.product.price}</div>
                 <div className="price">Quantity: {product.quantity}</div>
               </div>
             ))}

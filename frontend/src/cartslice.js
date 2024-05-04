@@ -4,26 +4,25 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     items: {},
-    price:0
+    price:0,
+    deliveryType:''
   },
   reducers: {
     addProduct:(state,action) =>{
-      console.log(action.payload)
+      console.log(action.payload,"slice")
       const data = action.payload;
-      let variant = {...data.variant};
       let product = {...data.product};
-      product["productId"] = product._id
-      variant["variantId"] = variant._id
-      const quantity = state.items[variant._id]?.quantity ?? 0
+      product["foodItemId"] = product._id
+      const quantity = state.items[product._id]?.quantity ?? 0
       if(quantity>0)
-        state.items[variant._id] =  {...state.items[variant._id],"quantity":quantity+1}
+        state.items[product._id] =  {...state.items[product._id],"quantity":quantity+1}
       else 
-        state.items[variant._id] = {product:product,variant:variant,"quantity":1}
+        state.items[product._id] = {product:product,"quantity":1}
       },
     deleteProduct:(state,action) =>{
       const variant = action.payload;
       const quantity = state.items[variant._id]?.quantity ?? 0
-      if(quantity>0)
+      if(quantity>1)
       state.items[variant._id].quantity = quantity-1
       else
         delete state.items[variant._id]
@@ -32,14 +31,14 @@ export const cartSlice = createSlice({
       state.price = action.payload
     },
     addAllproducts:(state,action)=>{
-      const products=action.payload
+      const foodItems=action.payload
       // console.log()
-      console.log(products)
+      console.log(foodItems)
       const result={}
       let price = 0
-      products.forEach(product => {
-         result[product.variantId._id] = {product:product.productId, variant:product.variantId,"quantity":product.quantity}
-         price += product.variantId.price * product.quantity
+      foodItems.forEach(product => {
+         result[product.FoodItemId._id] = {product:product.FoodItemId,"quantity":product.quantity}
+         price += product.price * product.quantity
       });
       state.items = result
       state.price =price
@@ -47,10 +46,13 @@ export const cartSlice = createSlice({
     deleteAllProducts:(state)=>{
       state.items ={}
       state.price =0
+    },
+    setDeliveryType: (state,action)=>{
+      state.deliveryType = action.payload
     }
   },
 })
 
-export const { addProduct, deleteProduct,setTotalPrice ,addAllproducts,deleteAllProducts} = cartSlice.actions
+export const { addProduct, deleteProduct,setTotalPrice ,addAllproducts,deleteAllProducts,setDeliveryType} = cartSlice.actions
 
 export default cartSlice.reducer

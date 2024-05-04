@@ -64,6 +64,24 @@ function AdminOrders() {
     getDeliveryData();
   },[])
 
+  const handleDone = async (order,status)=>{
+    console.log(order,status)
+    if(order.orderType == 'Pick Up'){
+      try{
+        const jsonData = {status:status}
+        const data = await postData("/admin/approve/"+order._id,JSON.stringify(jsonData));
+        if(data.message === "order updated"){
+              window.location.reload();
+        }
+      }
+      catch (error) {
+        console.error("Error fetching order data:", error);
+      }
+    }
+    else{
+      setOrder(order._id)
+    }
+  }
 
 
   
@@ -105,7 +123,7 @@ function AdminOrders() {
         <table className="table">
           <thead>
             <tr>
-              <th scope="col">OrderId</th>
+              {/* <th scope="col">OrderId</th> */}
               <th scope="col">Customer Name</th>
               <th scope="col">Total Amount</th>
               <th scope="col">No of Items</th>
@@ -121,7 +139,7 @@ function AdminOrders() {
               orderData?.map((order, index) => {
                 return (
                   <tr>
-                    <th scope="">{order._id}</th>
+                    {/* <th scope="">{order._id}</th> */}
                     <th scope="col">
                       {order.customerId?.firstName}
                       {order.customerId?.lastName}
@@ -133,6 +151,17 @@ function AdminOrders() {
                     </th>
                     <th scope="col">{order?.orderStatus}</th>
                     <th>
+                      { order.orderType === 'Pick Up' && order.orderStatus == "Approved" ?<>
+                        <button style={{
+                          backgroundColor:
+                            '#4287f5',
+                          border: "1px solid black",
+                          color: "black", 
+                        }}
+                          onClick={()=>handleDone(order,'Delivered')}
+                        >Complete Pick Up </button>
+                      </>:
+                      <>
                       <button
                         disabled={order?.orderStatus !== "Ordered"}
                         style={{
@@ -156,12 +185,15 @@ function AdminOrders() {
                           border: "1px solid white",
                           color: "white", // Change text color as needed
                         }}
-                        onClick={()=>setOrder(order._id)}
+                        onClick={()=>handleDone(order,'Approved')}
                         className="danger-button"
-                        data-toggle="modal" data-target="#exampleModal"
+                        
+                        data-toggle={order.orderType != 'Pick Up' ? "modal":''} data-target={order.orderType != 'Pick Up' ? "#exampleModal":''}
                       >
                         <DoneIcon />
                       </button>
+                      </>
+              }
                     </th>
                     <th scope="col">{order.paymentId?.status}</th>
                     <th scope="col">

@@ -39,52 +39,54 @@ export default function AdminRegister() {
   }
   return (
   <div class="container">
-    <div class="title">Admin Registration</div>
-    <div class="content">
-        <div class="user-details">
-          <div class="input-box">
+     <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card mt-5">
+            <div className="card-body">
+              <h2 className="card-title text-center mb-4">Welcome Back! Admin </h2>
+          <div class="form-group">
             <span class="details">First Name</span>
-            <input type="text" placeholder="Enter your First name" onChange={(e)=>handleData('firstName',e)} required/>
+            <input type="text" class="form-control" placeholder="Enter your First name" onChange={(e)=>handleData('firstName',e)} required/>
           </div>
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">Last name</span>
-            <input type="text" placeholder="Enter your Last username" onChange={(e)=>handleData('lastName',e)} required/>
+            <input type="text" class="form-control" placeholder="Enter your Last username" onChange={(e)=>handleData('lastName',e)} required/>
           </div>
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">Email</span>
-            <input type="email" placeholder="Enter your email" onChange={(e)=>handleData('email',e)} required/>
+            <input type="email" class="form-control"placeholder="Enter your email" onChange={(e)=>handleData('email',e)} required/>
           </div>
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">Password</span>
-            <input type="password" placeholder="Enter your password" onChange={(e)=>handleData('password',e)} required/>
+            <input type="password" class="form-control" placeholder="Enter your password" onChange={(e)=>handleData('password',e)} required/>
           </div>
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">Confirm Password</span>
-            <input type="password" placeholder="Confirm your password" onChange={(e)=>handleData('Confirmpassword',e)} required/>
+            <input type="password"  class="form-control"  placeholder="Confirm your password" onChange={(e)=>handleData('Confirmpassword',e)} required/>
           </div>
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">Phone Number</span>
-            <input type="tel" placeholder="Enter your number" onChange={(e)=>handleData('phoneNumber',e)} required/>
+            <input type="tel"class="form-control"  placeholder="Enter your number" onChange={(e)=>handleData('phoneNumber',e)} required/>
           </div>  
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">Street</span>
-            <input type="text" placeholder="Enter your street" onChange={(e)=>handleData('street',e)} required/>
+            <input type="text" class="form-control" placeholder="Enter your street" onChange={(e)=>handleData('street',e)} required/>
           </div> 
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">City</span>
-            <input type="text" placeholder="Enter your City" onChange={(e)=>handleData('city',e)} required/>
+            <input type="text" class="form-control" placeholder="Enter your City" onChange={(e)=>handleData('city',e)} required/>
           </div>      
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">State</span>
-            <input type="text" placeholder="Enter your State" onChange={(e)=>handleData('state',e)} required/>
+            <input type="text" class="form-control" placeholder="Enter your State" onChange={(e)=>handleData('state',e)} required/>
           </div> 
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">Country</span>
-            <input type="text" placeholder="Enter your Country" onChange={(e)=>handleData('country',e)} required/>
+            <input type="text" class="form-control" placeholder="Enter your Country" onChange={(e)=>handleData('country',e)} required/>
           </div> 
-          <div class="input-box">
+          <div class="form-group">
             <span class="details">Zip Code</span>
-            <input type="text" placeholder="Enter your PinCode" onChange={(e)=>handleData('pincode',e)} required/>
+            <input type="text" class="form-control" placeholder="Enter your PinCode" onChange={(e)=>handleData('pincode',e)} required/>
           </div> 
         </div>
         <div class="button">
@@ -92,6 +94,8 @@ export default function AdminRegister() {
         </div>
 
     </div>
+  </div>
+  </div>
   </div>
      
       

@@ -1,23 +1,17 @@
 const mongoose = require("mongoose");
 
-const Variant = require("./variant")
 const Category = require("./category")
-const Brand = require("./brand")
 const Admin = require("./admin")
 const Customer = require("./customer")
-const Delivery = require("./delivery")
 const Payment = require("./payment")
-const Product = require("./product")
 
 const orderSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     price: { type: Number, required: true },
     customerId:{type:mongoose.Schema.Types.ObjectID, ref:"Customer"},
-    deliveryId:{type:mongoose.Schema.Types.ObjectID, ref:"Delivery"},
     paymentId:{type:mongoose.Schema.Types.ObjectID, ref:"Payment"},
     Items:[{
-        productId: {type:mongoose.Schema.Types.ObjectID, ref:"Product"},
-        variantId: { type: mongoose.Schema.Types.ObjectID, ref: "Variant" },
+        FoodItemId: {type:mongoose.Schema.Types.ObjectID, ref:"FoodItems"},
         quantity:{type:Number,required:true,default:1},
     }
     ],
@@ -29,7 +23,8 @@ const orderSchema = mongoose.Schema({
         country: { type: String }
     },
     date:{type:Date,default:new Date()},
-    orderStatus:{type:String,default:"Ordered"}
+    orderStatus:{type:String,default:"Ordered"},
+    orderType:{type:String}
 })
 
 module.exports = mongoose.model("Order", orderSchema);

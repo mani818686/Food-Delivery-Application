@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom"
 import { getData } from '../../http-post-service';
 import { saveUser } from '../../userslice';
 import { setAuthToken, setLoggedIn } from '../../loginSlice';
+import { setDeliveryType } from "../../cartslice"
 
 function Checkout() {
 
@@ -18,10 +19,14 @@ function Checkout() {
         "pincode": ""
     }
     const [address, setAddress] = useState(defaultAddress)
+    const [orderType, setOrderType] = useState('Pick Up')
+
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const userAddreses = useSelector(state => state.user.user.address)
+    console.log(userAddreses)
 
     const [showAddress, setshowAddress] = useState(false)
 
@@ -29,6 +34,11 @@ function Checkout() {
 
     const token = localStorage.getItem("authToken")
     const isLoggedIn = useSelector((state) => state.login.details.isLoggedIn);
+
+
+    const handleOrderType  = (e)=>{
+        setOrderType(e.target.value)
+    }
 
     const handleAddress = (column, value) => {
         setAddress((data) => ({
@@ -42,19 +52,23 @@ function Checkout() {
         const response = await postData("/customer/add-address", JSON.stringify(address))
         setAddress(defaultAddress)
         console.log(response)
-
+        setshowAddress(false)
     }
     const handleOrder = () => {
-        const address = userAddreses[selectedAddressIndex]
-        const finalAddress = {
-            "street": address.street,
-            "city": address.city,
-            "state": address.state,
-            "country":address.country,
-            "pincode": address.pincode
-          }
-          console.log(finalAddress)
-        dispatch(saveSelectedAddress(finalAddress))
+        dispatch(setDeliveryType(orderType))
+        if(userAddreses && userAddreses.length >selectedAddressIndex){
+            const address = userAddreses[selectedAddressIndex]
+            const finalAddress = {
+                "street": address.street,
+                "city": address.city,
+                "state": address.state,
+                "country":address.country,
+                "pincode": address.pincode
+              }
+              console.log(finalAddress)
+            dispatch(saveSelectedAddress(finalAddress))
+        }
+       
         navigate("/payment")
     }
     const handleOptionChange = (index) => {
@@ -82,32 +96,39 @@ function Checkout() {
 
     return (
         <div className="checkout-container">
+            <div className="type">
+            <div>Choose the Delivery Type  </div>
+            <select value={orderType}  onChange={handleOrderType}>
+                <option value='Pick Up'>Pickup</option>
+                <option value='Home Delivery'>Home Delivery</option>
+            </select>
+            </div>
+            {orderType == 'Home Delivery' && 
+            <>
             <div className="address-header">
                 <div className="title">
                     Delivery Address
                 </div>
             </div>
             <div className="address-content">
+                <select value={selectedAddressIndex} onChange={(e)=>handleOptionChange(e.target.value)}>
                 {userAddreses && userAddreses?.map((address,index)=>{
                     return(
-                        <div className="form-check"> 
-                          <input type="radio" className="form-check-input form-check-inputValue address1" name="address"  value={index} onChange={()=>handleOptionChange(index)} checked={index == selectedAddressIndex }/>         
-                    <label class="form-check-label label1" htmlFor="address1">  
-                       <div className="addressContent">
+                    <option value={index} >     
                         {address.street} Street, {address.city}, {address.state}, {address.country}, {address.pincode}
-                       </div>
-                    </label>
-                    </div> 
+                       </option>   
                     )
                 })  
                 }
+                </select>
             </div>
-            <button className="btnColor btn-primary btn1" onClick={handleOrder}>Deliver Here</button>
+            </>}
+            <button className="active btn-primary" onClick={handleOrder}>Deliver Order</button>
             <div className="add-address">
-                {!showAddress && <div className="add-button">
+                {!showAddress && orderType == 'Home Delivery' && <div className="add-button">
                     <button className="btnAdd btn-light" onClick={() => setshowAddress((p) => !p)}>Add Address</button>
                 </div>}
-                {showAddress &&
+                {showAddress && orderType == 'Home Delivery' && 
                     <>
                               <h5  className="mt-4 p-2" style={{backgroundColor:"cadetblue", width: "90%"}}>Enter Delivery Address </h5>
                         <div className="input-address mt-4">
@@ -128,7 +149,7 @@ function Checkout() {
                                 <input type="text" className="form-control" id="Country" value={address.country} onChange={(e) => handleAddress("country", e.target.value)} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="PinCode" className="head">PinCode</label>
+                                <label htmlFor="PinCode" className="head">ZipCode</label>
                                 <input type="text" className="form-control" id="PinCode" value={address.pincode} onChange={(e) => handleAddress("pincode", e.target.value)} />
                             </div>
 

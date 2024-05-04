@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-const Product = require("./product")
 
 const adminSchema = mongoose.Schema({
 
@@ -25,7 +24,6 @@ const adminSchema = mongoose.Schema({
         state: { type: String },
         country: { type: String }
     },
-    products:[{productId: { type: mongoose.Schema.Types.ObjectID, ref: "Product" }}]
 })
 
 module.exports = mongoose.model("Admin", adminSchema);

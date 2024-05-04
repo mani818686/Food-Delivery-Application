@@ -42,20 +42,38 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className='login-container'>
-      <h3 className='center'><u>Admin Login</u></h3>
-
-      <div className="form-group">
-        <label htmlFor="email" className="head">Email</label>
-        <input type="email" className="form-control-item-lists" id="email" onChange={(e) => handleData('email', e)} />
+    <div className="row justify-content-center mt-5">
+    <div className="col-md-6">
+      <div className="card mt-5">
+        <div className="card-body">
+          <h2 className="card-title text-center mb-4">Welcome Back! Admin</h2>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                onChange={(e) => handleData('email', e)} 
+                placeholder="Enter your email address"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                onChange={(e) => handleData('password', e)}
+                className="form-control"
+                id="password"
+                placeholder="Enter your password"
+              />
+            </div>
+            <button type="submit" onClick={handleLogin} className="btn btn-primary btn-block">
+              Log in
+            </button>
+        </div>
       </div>
-      <div className="form-group">
-        <label htmlFor="password" className="head">Password</label>
-        <input type="password" className="form-control-item-lists" id="password" onChange={(e) => handleData('password', e)} />
-      </div>
-      <button type="submit" className="btn-Color" onClick={handleLogin}>Login</button>
-
     </div>
+  </div>
 
   )
 }

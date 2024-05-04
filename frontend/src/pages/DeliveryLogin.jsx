@@ -44,17 +44,39 @@ const defaultUser = { "email": "", "password": "" }
 
   return (
     <div className='login-container'>
-      <h3 className='center'><u>Delivery-Login</u></h3>
-
-      <div className="form-group">
-        <label htmlFor="email" className="head">Email</label>
-        <input type="email" className="form-control-item-lists" id="email" onChange={(e) => handleData('email', e)} />
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card mt-5">
+            <div className="card-body">
+              <h2 className="card-title text-center mb-4">Welcome Back! Delivery Driver</h2>
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    onChange={(e) => handleData('email', e)} 
+                    placeholder="Enter your email address"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    onChange={(e) => handleData('password', e)}
+                    className="form-control"
+                    id="password"
+                    placeholder="Enter your password"
+                  />
+                </div>
+                <button type="submit" onClick={handledeliveryLogin} className="btn btn-primary btn-block">
+                  Log in
+                </button>
+             
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="form-group">
-        <label htmlFor="password" className="head">Password</label>
-        <input type="password" className="form-control-item-lists" id="password" onChange={(e) => handleData('password', e)} />
-      </div>
-      <button type="submit" className="btn-color" onClick={handledeliveryLogin}>Login</button>
 
     </div>
 

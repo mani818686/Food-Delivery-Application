@@ -26,7 +26,8 @@ const customerSchema = mongoose.Schema({
         state: { type: String },
         country: { type: String }
     }],
-    wishlist:[{ productId: { type: mongoose.Schema.Types.ObjectID, ref: "Product" } ,variantId: { type: mongoose.Schema.Types.ObjectID, ref: "Variant" }, quantity:{type:Number,required:true,default:1}}],
+    DOB:{ type: String },
+    wishlist:[{ FoodItemId: { type: mongoose.Schema.Types.ObjectID, ref: "FoodItems" } , quantity:{type:Number,required:true,default:1}}],
     orderHistory: [{
         OrderId: { type: mongoose.Schema.Types.ObjectID, ref: "Order" },
     }],

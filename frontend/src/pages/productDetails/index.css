@@ -10,3 +10,7 @@
     border-radius: 5px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.15);
 }
+.button-edit{
+    color:black;
+    background-color: gray;
+}

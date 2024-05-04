@@ -31,9 +31,15 @@ function Orders() {
         {orderData && orderData?.map((order, index) => (
           <div className="order-card" key={index} onClick={()=>handleOrder(order)}>
             {order.Items.length === 1 ? (
-              <img src={"/uploads/"+order.Items[0]?.productId?.image}  width="80px" height={"60px"} alt={"uploads/"+order.Items[0]?.productId?.image} />
+              <img 
+               src={"/uploads/"+order.Items[0]?.FoodItemId?.image}  
+            //src="https://picsum.photos/seed/picsum/200/300"
+              width="80px" height={"60px"} alt={"uploads/"+order.Items[0]?.FoodItemId?.image} />
             ) : (
-              <img src={"/uploads/"+order.Items[0]?.productId?.image} width="80px" height="60px" alt={"/uploads/"+order.Items[0]?.productId?.image} 
+              <img
+               src={"/uploads/"+order.Items[0]?.FoodItemId?.image} 
+            //src="https://picsum.photos/seed/picsum/200/300"
+               width="80px" height="60px" alt={"/uploads/"+order.Items[0]?.FoodItemId?.image} 
               />
             )}
             <div className="order-details">

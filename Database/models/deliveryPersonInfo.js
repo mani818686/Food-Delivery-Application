@@ -21,8 +21,8 @@ const deliveryPersonInfoSchema = mongoose.Schema({
         state: { type: String },
         country: { type: String }
     }],
-    delivery:[ { type: mongoose.Schema.Types.ObjectId, ref: "Delivery" }]
+    orderId:[ { type: mongoose.Schema.Types.ObjectId, ref: "Order" }]
 
 })
 
-module.exports = mongoose.model("DeliveryPersonInfo", deliveryPersonInfoSchema);
+module.exports = mongoose.model("DeliveryDriver", deliveryPersonInfoSchema);

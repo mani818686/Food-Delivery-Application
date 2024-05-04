@@ -8,27 +8,56 @@ import { useNavigate } from "react-router-dom";
 import { setAuthToken, setLoggedIn } from "../../loginSlice";
 import { getData, postData } from "../../http-post-service";
 import { saveUser } from "../../userslice";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
-function Products({ category }) {
-  const [products, setProducts] = useState([]);
+function Products() {
+  const [category, setCategory] = useState([]);
+  const [selectedCategory,setSelectedCategory] = useState('')
+  const [foodItemsMap,setFoodItemsMap] = useState(new Map());
+  const [foodItems,setFoodItems] = useState([]);
   const token = localStorage.getItem("authToken");
-  const [sizes,setSizes] = useState("")
-  const [color,setColor] = useState("")
+  const [sizes, setSizes] = useState("");
+  const [color, setColor] = useState("");
 
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.login.details.isLoggedIn);
   const cart = useSelector((state) => state.cart.items);
-  console.log(cart);
+  // console.log(cart);
 
   const dispatch = useDispatch();
 
- 
 
-  
-const handleView = async (productId)=>{
-  navigate("/productDetails/"+productId)
-}
+    const handleAddCart = async (foodItem) => {
+
+      const response = await postData("/customer/wishlist/add/" + foodItem._id);
+      if (response.message === "Food Item added to wishlist successfully") {
+       let data ={
+        "product":foodItem,
+       }
+       console.log(data);
+        dispatch(addProduct(data))
+      } else {
+        console.error(response);
+      }
+    }
+    const handleDeleteCart = async (foodItem) => {
+      try {
+      
+          const response = await postData(
+            "/customer/wishlist/delete/" + foodItem._id
+          );
+          if (response.message === "FoodItem removed from wishlist successfully") {
+            dispatch(deleteProduct(foodItem));
+          } else {
+            console.error(response);
+          }
+        }
+       catch (error) {
+        console.error("Error deleting product:", error);
+      }
+    };
 
   useEffect(() => {
     const getProfile = async () => {
@@ -47,78 +76,97 @@ const handleView = async (productId)=>{
     getProfile();
   }, [isLoggedIn]);
 
+  const handleCategory = (c) =>{
+    console.log(c)
+    setSelectedCategory(c)
+  }
+
+  useEffect(()=>{
+    setFoodItems(foodItemsMap.get(selectedCategory))
+  },[selectedCategory])
+
   useEffect(() => {
     const fetchData = async () => {
-      let url = "/product/products";
-      if (category) {
-        url += "?categoryName=" + category;
-      }
+      let url = "/foodItem/category";
+
       try {
         const result = await getData(url);
-        setProducts(result.products);
-
-        const sizes = result.products[0].variantId.map(v=>v.size)
-        const uniqueSizes = [...new Set(sizes)];
-        const colors =result.products[0].variantId.map(v=>v.color)
-        const uniqueColors = [...new Set(colors)];
-        const joinedSizes = uniqueSizes.join(',');
-        const joinedColors = uniqueColors.join(',');
-        setSizes(joinedSizes)
-        setColor(joinedColors)
+        console.log(result);
+        setCategory(result.categories);
+        const prevfoodItems = new Map(foodItemsMap);
+       
+        result.categories.forEach((c,index)=>{
+          if(index === 0){
+            console.log(c.categoryName)
+             setSelectedCategory(c.categoryName)
+             setFoodItems(c.foodItems)
+          }
+         
+          prevfoodItems.set(c.categoryName,c.foodItems)
+        })
+        setFoodItemsMap(prevfoodItems)
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData();
-  }, [category]);
+  }, []);
 
   return (
     <div className="products-container">
-      <div className="filters">filter</div>
-      <div className="products mt-5">
-        {cart &&
-          products &&
-          products?.map((product) => (
-            <div key={product._id} className="Card">
-              <div className="image imgText">
-                <img
-                  width="300px"
-                  height="300px"
-                  alt={product.name}
-                  src={"/uploads/" + product.image}
-                />
-              </div>
-              <div className="productBrand">
-                <div className="product">
-                  <h5 className="brand-name">{product.brandId.brandName}</h5>
-                  <div className="product-name">{product.name}</div>
-                </div>
-                <div style={{float:'right'}}>
-                  <button className="btn btn-primary" onClick={()=>handleView(product._id)}>View Details</button>
-                  </div>
-                {/*
-                    <button
-                      className='add-product-btn btn btn-primary'
-                      onClick={() => handleAddCart(product)}
-                    >
-                     Add to Cart
-                    </button>
-                    {cart[product._id]?.quantity > 0 && <div>Quantity : {cart[product._id]?.quantity ?? 0}</div>}
-                  </div>
-                </div>
-              </div> */}
-              <div  style={{display:'flex', flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
-              <div  className="color">Size(s) Available: {sizes}</div>
-              <div  style={{display:'flex', flexDirection:'row'}} className="color">Colors(s) Available: {color}</div>
-              <div  style={{display:'flex', flexDirection:'row'}} className="color">Price : {product.variantId[0].price}</div>
-             </div>
-             </div>
-            </div>
-          ))}
+      <div className="menu">
+      <ul>
+        {category &&
+          category.map((c, index) => {
+            return (
+              <li className={`${selectedCategory == c.categoryName ? 'active':''}`} key={index} onClick={(e)=>handleCategory(c.categoryName)}>
+               {c.categoryName}
+              </li>
+            );
+          })}
+           </ul>
       </div>
-    </div>
-  );
+      {cart && foodItems &&
+        foodItems.map((product) => (
+          <div key={product._id} className="Card">
+            <div className="image imgText">
+              <img
+                width="300px"
+                height="300px"
+                alt={product.name}
+                src={"/uploads/" + product.image}
+                // src="https://picsum.photos/seed/picsum/200/300"
+              />
+            </div>
+            <div className="productBrand">
+              <div className="product">
+                <div className="product-name">{product.name}</div>
+              </div>
+              <div style={{ float: 'right' }}>
+                <button
+                  className=' btn'
+                  onClick={() => handleAddCart(product)}
+                >
+                  <AddIcon/>
+                </button>
+                {cart[product._id]?.quantity > 0 && <button
+                  className='btn'
+                  onClick={() => handleDeleteCart(product)}
+                >
+                  <RemoveIcon/>
+                </button>
+                }
+                {cart[product._id]?.quantity > 0 && <div>Quantity : {cart[product._id]?.quantity ?? 0}</div>}
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'row' }} className="color">Price : {product.price}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+  )      
 }
-
 export default Products;
+

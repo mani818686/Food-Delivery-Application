@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const deliveryPersonModel = require("../models/deliveryPersonInfo");
-const deliveryModel = require("../models/delivery")
 const orderModel = require("../models/order")
 const CheckAuthDelivery = require("../middleware/CheckAuthDelivery");
 
@@ -159,10 +158,10 @@ router.get("/", CheckAuthDelivery, async (req, res) => {
     try {
         const delivery = await deliveryPersonModel.findById(req.user.userId)
         .populate({
-            path:"delivery",
-            model:"Delivery",
+            path:"orderId",
+            model:"Order",
             populate: {
-                path: 'customer',
+                path: 'customerId',
                 model: 'Customer',
             }
         });
@@ -180,22 +179,17 @@ router.get("/", CheckAuthDelivery, async (req, res) => {
     }}
 )
 
-router.post("/update/:deliveryId", CheckAuthDelivery, async (req, res) => {
-    const deliveryId = req.params.deliveryId
+router.post("/update/:orderId", CheckAuthDelivery, async (req, res) => {
+    const deliveryId = req.params.orderId
 
 
     try {
       
-        await deliveryModel.findByIdAndUpdate(deliveryId,{
-            $set:{
-                status:req.body.status
-            }})
-      await orderModel.updateOne({deliveryId:deliveryId},{
+        await orderModel.findByIdAndUpdate(deliveryId,{
             $set:{
                 orderStatus:req.body.status
-            }
-        })
-        
+            }})
+     
         res.status(200).json({ message:'updated'});
        
     }

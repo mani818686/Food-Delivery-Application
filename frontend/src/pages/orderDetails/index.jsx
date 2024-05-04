@@ -37,12 +37,14 @@ function OrderDetails() {
       <div className="product-details">
         {orderDetails.Items.map((item, index) => (
           <div className="product-card" key={index}>
-            <img src={"/uploads/"+item.productId.image} width="300px" height = "300px "alt={item.productId.name} />
+            <img 
+            src={"/uploads/"+item.FoodItemId.image}
+            // src="https://picsum.photos/seed/picsum/200/300"
+            width="300px" height = "300px "  
+            />
             <div className="product-info">
-              <p><strong>Product Name</strong>: {item.productId.name}</p>
-              <p><strong>Price</strong>: ${item.variantId.price.toFixed(2)}</p>
-              <p><strong>Variant</strong>: {item.variantId.size}</p>
-              <p><strong>Color</strong>:   {item.variantId.color}</p>
+              <p><strong>Product Name</strong>: {item.FoodItemId.name}</p>
+              <p><strong>Price</strong>: ${item.FoodItemId.price.toFixed(2)}</p>
               <p><strong>Quantity</strong>: {item.quantity}</p>
             </div>
           </div>

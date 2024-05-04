@@ -5,8 +5,8 @@
 }
 
 .address-header{
-    background-color: #2874f0;;
-    color: white;
+    background-color: #abdbe3;;
+    color: black;
     padding: 10px;
     text-align: left;
 }
@@ -20,12 +20,7 @@
     border: 1px solid whitesmoke;
     display: flex;
 }
-.btn{
-    display: flex !important;
-    flex-direction: column !important;
-    background-color: whitesmoke !important;
-    color:black
-}
+
 .radio{
     display: inline;
 }
@@ -47,7 +42,7 @@
  .form-check-inputValue.address1 {
    float: inline-start;
     margin-left: -3rem !important;
-    color: #007bff;
+    color: #eab676;
 
    
 }
@@ -81,13 +76,19 @@
         width: 100%; 
     }
 }
+.type{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:2
+}
 
 
 .btnAdress {
   display: block;
   margin-top: 40px;
   margin-bottom: 50px;
-  background-color: #007bff;
+  background-color: #eab676;
   padding: 10px 15px;
   border: none;
   border-radius: 3px;
@@ -100,7 +101,7 @@
     display: block;
     margin-top: 40px;
     margin-bottom: 50px;
-    background-color: #007bff;
+    background-color: #eab676;
     padding: 10px 15px;
     border: none;
     border-radius: 3px;
@@ -109,13 +110,13 @@
 }
 
 .btn1:hover {
-    background-color: blue;
+    background-color: #2596be;
   }
 
 
 
   .btnColor {
-    background-color: #007bff;
+    background-color: #2596be;
     padding: 10px 15px;
     border: none;
     border-radius: 3px;

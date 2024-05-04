@@ -3,6 +3,7 @@ import "./index.css";
 import { getData } from "../../http-post-service";
 
 function Confirmation({ orderDetails }) {
+  console.log(orderDetails)
   const [orderData, setOrderData] = useState(orderDetails ?? {});
 
   const [orderItems, setOrderItems] = useState(
@@ -54,20 +55,17 @@ function Confirmation({ orderDetails }) {
         <div style={styles.section}>
           <h3 style={styles.subHeader}>Order Items:</h3>
           <ul style={styles.list}>
-            {orderItems?.map((item) => (
+            {orderItems?.map((item,index) => (
               <li key={item.productId?._id} style={{display:'flex',justifyContent:'space-around'}}>
+                <div>
+                <strong>{index+1}.</strong>
+                </div>
                   <div>
                     <strong>Product Name </strong>
-                    {item.productId?.name}{" "}
+                    {item.FoodItemId?.name}{" "}
                   </div>
                   <div>
-                    <strong>Price </strong>${item.variantId?.price}
-                  </div>
-                  <div>
-                    <strong>Size </strong>: {item.variantId?.size}
-                  </div>
-                  <div>
-                    <strong>Color </strong>: {item.variantId?.color}
+                    <strong>Price </strong>${item.FoodItemId.price}
                   </div>
                   <p>
                     <strong>quantity </strong>: {item.quantity}
@@ -83,7 +81,7 @@ function Confirmation({ orderDetails }) {
           <ul style={styles.list}>
             <li>Payment Method: {paymentDetails?.paymentMethod}</li>
             <li>Amount: ${paymentDetails?.amount}</li>
-            <li>Payment Details: {paymentDetails?.paymentDetails}</li>
+            <li>Card Details: {paymentDetails?.cardNumber}</li>
             <li>Date: {new Date(paymentDetails?.date).toLocaleString()}</li>
           </ul>
         </div>

@@ -110,7 +110,7 @@ function UserProductDetails() {
                 </button>
                 {cart[variant._id]?.quantity > 0 && <div>Quantity : {cart[variant._id]?.quantity ?? 0}</div>}
                 { variant && variant?._id in cart && cart[variant._id]?.quantity > 0 && <button
-                      className='add-product-btn btn btn-primary'
+                      className='btn btn-primary'
                       onClick={() => handleDeleteCart(variant)}
                     ><DeleteIcon /> 
                     </button>

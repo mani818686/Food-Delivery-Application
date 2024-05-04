@@ -5,7 +5,6 @@ import Register from './pages/register';
 import Navbar from './components/navbar';
 import Home from './pages/home/home';
 import { useState } from 'react';
-import Products from './pages/products/products';
 import Addproducts from './pages/addProducts/addproducts';
 import Cart from './pages/cart/cart';
 import Checkout from './pages/checkout';
@@ -27,6 +26,8 @@ import DeliveryDashboard from './pages/deliveryDashboard';
 import ProductDetails from './pages/productDetails';
 import UserProductDetails from './pages/userProductDetails';
 import AdminOrders from './pages/adminOrders';
+import Products from './pages/products/products';
+import DeliveryDetails from './pages/DeliveryDetails';
 
 
 function App() {
@@ -52,7 +53,8 @@ const handleOrderDetails = (details)=>{
         <Route exact path="/" element={<Home handleSelectedCategory = {handleCategory}/>}></Route>
         <Route exact path="/register" element={<Register/>}></Route>
         <Route exact path="/login" element={<Login/>}></Route>
-        <Route exact path="/products" element={<Products category={Category}/>}></Route>
+        <Route exact path="/menu" element={<Products />}></Route>
+        <Route exact path="/dashboard" element={<Dashboard />}></Route>
         <Route exact path="/cart"
           element={<Cart/>}>
          </Route>
@@ -81,6 +83,12 @@ const handleOrderDetails = (details)=>{
           }
         />
          <Route
+          path="/deliveryDetails"
+          element={
+              <DeliveryDetails/>
+          }
+        />
+         <Route
           path="/admin/productUpdate/:productId"
           element={
               <ProductDetails/>
@@ -93,7 +101,7 @@ const handleOrderDetails = (details)=>{
           }
         />
         <Route
-          path="/addProducts"
+          path="/addItem"
           element={
             <RequireAdminAuth>
               <Addproducts />

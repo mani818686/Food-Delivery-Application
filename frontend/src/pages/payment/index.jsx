@@ -24,6 +24,8 @@ function Payment( {handleOrderDetails}) {
 
     const token = localStorage.getItem("authToken")
 
+    const deliveryType = useSelector((state)=>state.cart.deliveryType)
+
     const totalPrice = useSelector((state)=>state.cart.price)
 
     const handlePaymentMethod = (e) => {
@@ -43,7 +45,7 @@ function Payment( {handleOrderDetails}) {
     }
 
     const handlePayment = async () =>{
-        const Items = Object.values(cart).map((product)=>({productId:product.product._id,variantId:product.variant._id,quantity:product.quantity}))
+        const Items = Object.values(cart).map((product)=>({FoodItemId:product.product._id,quantity:product.quantity}))
         console.log(selectedAddress)
         let orderData ={
             "price":totalPrice,
@@ -54,6 +56,7 @@ function Payment( {handleOrderDetails}) {
             "expiryCode":cardExpiry,
             "items":Items,
             "address":selectedAddress,
+            "orderType":deliveryType
         }
         try {
             const result = await postData('/customer/createOrder',JSON.stringify(orderData) );
@@ -96,7 +99,7 @@ function Payment( {handleOrderDetails}) {
   
     return (
         <div className="payment-container">
-            <div className="payment-header">
+            <div className="payment-header active">
                 <div className="title">
                     Payment Options
                 </div>
@@ -136,7 +139,7 @@ function Payment( {handleOrderDetails}) {
                 </div>
             </div>
             <div>
-                <button className='btnPayment' onClick={handlePayment}>Proceed to Pay ${totalPrice.toFixed(2)}</button>
+                <button className='active' onClick={handlePayment}>Proceed to Pay ${totalPrice.toFixed(2)}</button>
             </div>
         </div>
     )

@@ -16,22 +16,24 @@ function Navbar() {
     }
 
     return (
-        <nav className="navbar fixed-top bg-dark border-bottom border-body text-white" data-bs-theme="dark">
+        <nav className="navbar fixed-top border-bottom border-body border-dark text-dark" >
             <div className="container-fluid">
-                <a className="navbar-brand" href="/">E-Commerce Fashion</a>
+               
+                <a className="navbar-brand" href="/"> <img className="border-0 pr-1" width={20} height={20} src="restaurent.jpeg"/>Restaurent</a>
                 <div className="d-flex">
-                {loggedIn && userType=='user' &&  <Link className="navbar-brand" to="/cart">Cart</Link>}
-                {loggedIn && userType=='user'  &&  <Link className="navbar-brand" to="/orders">My Orders</Link>}
-                {loggedIn && userType=='admin'  &&  <Link className="navbar-brand" to="/addProducts">Add Product</Link>}
-                {loggedIn && userType=='admin'  &&  <Link className="navbar-brand" to="/admin/orders">Orders</Link>}
+                {loggedIn && userType=='user' &&  <Link className="navbar-brand border active px-1 text-white rounded" to="/cart">Cart</Link>}
+                {loggedIn && userType=='user'  &&  <Link className="navbar-brand border active px-1 text-white rounded" to="/orders">My Orders</Link>}
+                {loggedIn && userType=='admin'  &&  <Link className="navbar-brand border active px-1 text-white rounded" to="/addItem">Add Food Item</Link>}
+                {loggedIn && userType=='admin'  &&  <Link className="navbar-brand border active px-1 text-white rounded" to="/deliverydetails">Delivery Persons</Link>}
+                {loggedIn && userType=='admin'  &&  <Link className="navbar-brand border active px-1 text-white rounded" to="/admin/orders">Orders</Link>}
                 {loggedIn && <div className="navbar-brand"> Welcome, {name}</div>}
-                {!loggedIn && <Link className="navbar-brand" to="/login">Login</Link>}
-               {!loggedIn &&  <Link className="navbar-brand" to="/register">Register</Link>}
-               {!loggedIn && <Link className="navbar-brand" to="/login/admin">Admin Login</Link>}
+                {!loggedIn && <Link className="navbar-brand border bg-success px-1 text-white rounded" to="/login">Login</Link>}
+               {!loggedIn &&  <Link className="navbar-brand border bg-success px-1 text-white rounded" to="/register">Register</Link>}
+               {!loggedIn && <Link className="navbar-brand border bg-warning px-1 rounded" to="/login/admin">Admin Login</Link>}
                {/* {!loggedIn &&  <Link className="navbar-brand" to="/signup/admin">Admin Register</Link>} */}
                {/* {!loggedIn && <Link className="navbar-brand" to="/login/delivery">Delivery Login</Link>}
                {!loggedIn &&  <Link className="navbar-brand" to="/register/delivery">Delivery Register</Link>} */}
-               {loggedIn &&  <div className="navbar-brand"  onClick={handleLogout}>Logout</div>}
+               {loggedIn &&  <div className="navbar-brand border bg-dark px-1 text-white rounded"  onClick={handleLogout}>Logout</div>}
                 </div>
             </div>
         </nav>

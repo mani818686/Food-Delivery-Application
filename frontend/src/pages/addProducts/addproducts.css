@@ -1,13 +1,5 @@
 .login-container-item {
-  width: 500px;
-  margin: auto;
-  padding: 20px 20px 20px 20px;
   margin-top: 110px;
-  border: 2px solid #ccc;
-  border-radius: 2px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-
 }
 
 .form-group {
@@ -35,18 +27,9 @@ font-style: normal;
   overflow: hidden;
 }
 
-.btn-color {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  display: flex;
-  margin-top: 25px;
-}
-.btn:hover {
-  background-color: #0056b3;
+.active{
+  border: 1px solid rgb(218, 136, 12);
+  background: rgb(218, 136, 12);
 }
 
 
@@ -56,4 +39,34 @@ font-style: normal;
 
 .size{
   width: 259px !important;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 5px;
 }

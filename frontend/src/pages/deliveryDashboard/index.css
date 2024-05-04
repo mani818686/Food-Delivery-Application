@@ -4,3 +4,22 @@
 .test-select{
     margin-left: 580px;
 }
+.delivery-card{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    
+}
+.table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+td, th {
+    border: 1px solid #dddddd;
+    padding: 8px;
+  }
+  
+  th{
+    background-color: #dddddd;
+    border: 1px solid black;
+  }
